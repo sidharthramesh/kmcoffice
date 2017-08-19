@@ -31,8 +31,7 @@ class EventDetail(generic.UpdateView):
     success_url = '/list' 
     def user_passes_test(self, request):
         if request.user.is_authenticated():
-            self.object = self.get_object()
-            return self.object.user == request.user
+            return True
         return False
 
     def dispatch(self, request, *args, **kwargs):
