@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<section class="container">
+        <h2>Awaiting requests</h2>
+        <table>
+                {% for book in awaiting %}
+                <tr>
+                    <td>{{book.venue}}</td>
+                    <td><a href="{% url 'detail' book.pk %}">{{book.title}}</a></td>
+                    <td>{{book.start_time|date}}</td>
+                    <td>{{book.start_time|time:"g:iA"|lower}} to {{book.end_time|time:"g:iA"|lower}}</td>
+                    
+                <tr>
+                {% endfor %}
+        </table>
+</section>
+{%endif%}
+<section class="container">
+        <h2>Booked Slots</h2>
+<table>
+        {% for book in approved %}
+        <tr>
+            <td>{{book.venue}}</td>
+            <td><a href="{% url 'detail' book.pk %}">{{book.title}}</a></td>
+            <td>{{book.start_time|date}}</td>
+            <td>{{book.start_time|time:"g:iA"|lower}} to {{book.end_time|time:"g:iA"|lower}}</td>
+            
+        <tr>
+        {% endfor %}
+</table>
+</section>
+{% if user.is_authenticated %}
+<section class="container">
+        <h2>Denied</h2>
+        <table>
+                {% for book in denied %}
+                <tr>
+                    <td>{{book.venue}}</td>
+                    <td><a href="{% url 'detail' book.pk %}">{{book.title}}</a></td>
+                    <td>{{book.start_time|date}}</td>
+                    <td>{{book.start_time|time:"g:iA"|lower}} to {{book.end_time|time:"g:iA"|lower}}</td>
+                    
+                <tr>
+                {% endfor %}
+        </table>
+</section>
+{%endif%}
+
+{% endblock body %}
+
+
+{% block footer %}
+{% if not user.is_authenticated %}
+<section class="container">
+<a href="{%url 'login'%}"><button class="button button-outline">Login</button></a>
+</section>
+{%else%}
+<section class="container">
+<a href="{%url 'logout'%}"><button class="button button-outline">Logout</button></a>
+</section>
+{% endif %}
+{% endblock footer %}
+

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
+{% endblock head %}
+    
+
+{% block body %}
+        <section class="container">
+        <form action="" method="post">{% csrf_token %}
+            <fieldset>
+                {{form.title.label_tag}}
+                {{form.title}}
+                
+                {{form.description.label_tag}}
+                {{form.description}}
+                
+                {{form.venue.label_tag}}
+                {{form.venue}}
+                <div class ="row">
+                    <div class="column">
+                    {{form.start_time.label_tag}}
+                    {{form.start_time}}
+                    </div>
+                    <div class="column">
+                    {{form.end_time.label_tag}}
+                    {{form.end_time}}
+                    </div>
+                    </div>
+
+        <input type="submit" value="Book">
+            </fieldset>
+        </form>
+        </section>
+{% endblock body %}
+
+{% block footer %}
+<section class="container">
+<a href="{% url 'list' %}"><button class="button button-outline">Approved List</button></a>
+</section>
+{% endblock footer %}
+    
+{% block js %}
+<script src="https://unpkg.com/flatpickr">
+</script>
+<script>
+        flatpickr("#id_start_time", {enableTime: true});
+        flatpickr("#id_end_time",{enableTime: true});
+</script>
+{% endblock js %}
