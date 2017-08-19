@@ -37,7 +37,7 @@ class EventDetail(generic.UpdateView):
     def dispatch(self, request, *args, **kwargs):
         if not self.user_passes_test(request):
             return redirect('login')
-        return super(ProfileUpdate, self).dispatch(
+        return super(EventDetail, self).dispatch(
             request, *args, **kwargs)
 
     
