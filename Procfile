@@ -1,1 +1,1 @@
-web: run-program gunicorn kmcoffice.wsgi --log-file -
+web: gunicorn kmcoffice.wsgi --log-file -
