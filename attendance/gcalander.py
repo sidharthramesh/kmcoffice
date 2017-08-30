@@ -27,6 +27,7 @@ def get_classes(year,month,date):
       'end':c['end']['dateTime'],
       'department':c.get('description'),
       'name':c.get('summary'),
+      'location':c.get('location'),
     }
     classes.append(period)
   return classes
