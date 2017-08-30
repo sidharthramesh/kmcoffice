@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/$',authviews.login,{'template_name':'venue/login.html','authentication_form':LoginForm},name='login'),
     url(r'^logout/$', authviews.logout, {'next_page': '/list'}, name='logout'),
-    url(r'',include('venue.urls')),
-    
+    url(r'^venue/',include('venue.urls')),
+    url(r'^attendance/',include('attendance.urls')),
 ]
