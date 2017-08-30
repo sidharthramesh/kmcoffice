@@ -2,13 +2,14 @@ from datetime import datetime, timedelta
 from pytz import timezone
 import requests
 from decouple import config
-calander_id = 'pi2m3dda6ljkrmh473624vvl9s@group.calendar.google.com'
-key = config('CAL_KEY')
-url = "https://www.googleapis.com/calendar/v3/calendars/{calander_id}/events".format(calander_id=calander_id)
 
-def get_classes(year,month,date):
+key = config('CAL_KEY')
+
+
+def get_classes(*args,calander_id='pi2m3dda6ljkrmh473624vvl9s@group.calendar.google.com'):
+  url = "https://www.googleapis.com/calendar/v3/calendars/{calander_id}/events".format(calander_id=calander_id)
   india = timezone('Asia/Calcutta')
-  start = datetime(year,month,date,tzinfo=india)
+  start = datetime(*args,tzinfo=india)
   end = start + timedelta(days=1)
   a = requests.get(url,
   {

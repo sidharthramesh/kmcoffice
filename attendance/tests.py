@@ -6,4 +6,5 @@ class GcalTest(TestCase):
         classes = get_classes(2017,8,31)
         self.assertEqual(len(classes),5)
         self.assertIsNotNone(classes[0].get('department'))
+        self.assertEqual(classes[0].get('department'),'Pharmacology')
         self.assertIsNotNone(classes[0].get('location'))

@@ -10,7 +10,8 @@ class Department(models.Model):
 class Batch(models.Model):
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=True)
-
+    calander_id = models.CharField(max_length=100)
+    
     def __str__(self):
         return self.name
 
