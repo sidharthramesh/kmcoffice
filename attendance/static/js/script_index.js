@@ -139,6 +139,7 @@ function selectDate (obj) {
   updateClasses(obj.querySelector("input[type=hidden]").value, document.getElementById('year_years_selection').value, document.getElementById('batch_batches_selection').value);
 };
 function updateClasses (date, year, batch) {
+  console.log(date, year, batch);
   var xmlhttp;
   if (window.XMLHttpRequest) {
     xhttp = new XMLHttpRequest();

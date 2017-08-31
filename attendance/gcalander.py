@@ -1,15 +1,17 @@
 from datetime import datetime, timedelta
+from dateutil import parser
 from pytz import timezone
 import requests
 from decouple import config
+from .models import Department
 
 key = config('CAL_KEY')
 
 
-def get_classes(*args,calander_id='pi2m3dda6ljkrmh473624vvl9s@group.calendar.google.com'):
-  url = "https://www.googleapis.com/calendar/v3/calendars/{calander_id}/events".format(calander_id=calander_id)
+def get_classes(date_string, batch):
+  url = "https://www.googleapis.com/calendar/v3/calendars/{calander_id}/events".format(calander_id=batch.calander_id)
   india = timezone('Asia/Calcutta')
-  start = datetime(*args,tzinfo=india)
+  start = parser.parse(date_string).replace(tzinfo=india)
   end = start + timedelta(days=1)
   a = requests.get(url,
   {
@@ -23,12 +25,22 @@ def get_classes(*args,calander_id='pi2m3dda6ljkrmh473624vvl9s@group.calendar.goo
   s = a.json()
   classes = []
   for c in s['items']:
+    try:
+      dept = Department.objects.get(name=c.get('description')).pk
+    except Department.DoesNotExist:
+      dept = None
+      for dep in Department.objects.all():
+        if c.get('summary') in dep.name:
+          dept = dep.pk
+    
+      
     period = {
       'start':c['start']['dateTime'],
       'end':c['end']['dateTime'],
-      'department':c.get('description'),
+      'department':dept,
       'name':c.get('summary'),
       'location':c.get('location'),
+      'batch': batch.pk,
     }
     classes.append(period)
   return classes

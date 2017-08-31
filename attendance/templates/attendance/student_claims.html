@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+{% extends "attendance/base.html" %}
+{% load static %}
 {% block body %}
 
 <div id="viewport">
@@ -6,6 +7,13 @@
           <h1>Attendance Claims</h1>
           <p>Fill out the form below to claim attendance for events you've had to cover.</p>
         </div>
+        <form action="" style="display:None">
+            {% csrf_token %}
+            {{periodform.department}}
+            {{periodform.batch}}
+            {{studentform.event}}
+          </form>
+        
         <div id="name" class="show">
           <div class="tooltip">What's your name?</div>
           <input id="name_text" type="text"/>
@@ -128,6 +136,7 @@
           <div id="buttonTray_next">Next</div>
         </div>
       </div>
+      
 
 {% endblock body %}
     
