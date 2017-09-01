@@ -9,6 +9,6 @@ install:
   - pip install coverage
 
 script: 
-  - python manage.py test attendance
+  - coverage run --source='.' manage.py test attendance
 
 after_success: coverage report
