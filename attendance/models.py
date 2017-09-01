@@ -2,6 +2,7 @@ from django.db import models
 from venue.models import Venue
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from django.utils import timezone
 # Create your models here.
 class Department(models.Model):
     name = models.CharField(max_length=200)
@@ -89,8 +90,8 @@ def add_serial_number(sender,instance, **kwargs):
     
     preclaims = instance.student.preclaims
     if len(preclaims.filter(
-        event__start_time__lte=instance.start_time, 
-        event__end_time__gte=instance.end_time,
+        event__start_time__lte=instance.event.start_time, 
+        event__end_time__gte=instance.event.end_time,
         )) >= 1:
         instance.pre_claim_approved = True
     

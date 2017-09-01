@@ -5,6 +5,7 @@ from .gcalander import get_classes
 from django.views import generic
 from json import loads
 from .forms import StudentForm, PeriodForm
+from django.utils import dateparse
 # Create your views here.
 def index(request):
     return render(request,'attendance/student_claims.html',{'periodform':PeriodForm, 'studentform':StudentForm})
@@ -32,42 +33,54 @@ def active_batches(request):
 'active_batches':active_batches})
 
 def process_claims(request):
+    #print("Got a claim")
     data = loads(request.body.decode('utf-8'))
-    student_data = {data[k] for k in ['name','roll_no','email','serial','event']}
+    #print(data)
+    student_data = {k:data[k] for k in ['name','roll_no','email','serial','event']}
+    #print(student_data)
     student_form = StudentForm(student_data)
-    if not student_form.is_valid():
+    
+    if student_form.is_valid():
+        pass
+        #print("Student Form valid")
+        student_data = student_form.cleaned_data
+        student,_ = Student.objects.get_or_create(roll_no=student_data['roll_no'])
+        student.email = student_data.get('email')
+        student.serial = student_data.get('serial')
+        #print(student)
+        student.save()
+    else:
+        #print("Student form invalid")
         return JsonResponse({
     'success':False,
     "errors":student_form.errors
     })
-    
-    student_data = student_form.cleaned_data
-    student = Student.objects.get_or_create(roll_no=student_data['roll_no'])
-    student.email = student_data['email']
-    student.serial = student_data['serial']
-    student.save()
-
-    batch = student_data['batch']
     errors = []
-    for period in data['selectedClasses']:
+    clean_classes = []
+    for period in data.get('selectedClasses'):
         p = PeriodForm(period)
         if p.is_valid():
             c = p.cleaned_data
-            p = Period.objects.get_or_create(
-                batch=Batch.objects.get(name=c['batch']),
+            clean_classes.append(c)
+        else:
+            errors.append(p.errors)
+
+    if len(errors) > 0:
+        return JsonResponse({"success":False, "errors":errors})
+    #print((clean_classes))
+    for c in clean_classes:
+
+            p,_ = Period.objects.get_or_create(
+                batch=c['batch'],
                 name=c['name'],
-                start_time=c['start_time'],
-                end_time=c['end_time'],
+                start_time=c['start'],
+                end_time=c['end'],
                 department = c['department'])
 
-            claim = Claim.create(
-                event = student_data['event'],
+            claim = Claim.objects.create(
+                event = student_data.get('event'),
                 period = p,
                 student = student,
             )
-        else:
-            errors.append(p.errors)
-        if len(errors) > 0:
-            return JsonResponse({"success":False, "errors":errors})
     
     return JsonResponse({"success":True})

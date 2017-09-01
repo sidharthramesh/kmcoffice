@@ -25,13 +25,19 @@ def get_classes(date_string, batch):
   s = a.json()
   classes = []
   for c in s['items']:
-    try:
+    des = c.get('description')
+    if not des is None:
+
       dept = Department.objects.get(name=c.get('description')).pk
-    except Department.DoesNotExist:
+    else:
+      
       dept = None
       for dep in Department.objects.all():
-        if c.get('summary') in dep.name:
+        #print("Did not get desc. Searching {} in {}".format(c.get('summary'), dep))
+        if dep.name in c.get('summary'):
+          #print("Found")
           dept = dep.pk
+          break
     
       
     period = {
