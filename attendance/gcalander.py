@@ -23,8 +23,8 @@ def get_classes(date_string, batch):
     })
 
   s = a.json()
-  print(a.status_code)
-  print(s)
+  #print(a.status_code)
+  #print(s)
   classes = []
   for c in s['items']:
     des = c.get('description')
