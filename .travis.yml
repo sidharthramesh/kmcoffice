@@ -6,6 +6,9 @@ before_install:
   - export python_files="tests.py test_*.py *_tests.py"
 install: 
   - "pip install -r requirements.txt"
+  - pip install coverage
+
 script: 
-  - pytest
   - python manage.py test attendance
+
+after_success: coverage report
