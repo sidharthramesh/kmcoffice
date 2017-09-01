@@ -1,9 +1,9 @@
 language: python
 python:
   - "3.5"
-env:
-  - DJANGO_SETTINGS_MODULE = kmcoffice.settings
-  - python_files = tests.py test_*.py *_tests.py
+before_install:
+  - export DJANGO_SETTINGS_MODULE=kmcoffice.settings
+  - export python_files = tests.py test_*.py *_tests.py
 install: 
   - "pip install -r requirements.txt"
 script: pytest
