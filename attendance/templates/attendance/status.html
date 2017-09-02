@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .fa-times{
+        color: orangered
+    }
+    .fa-check{
+        color:  #00cc00
+        
+    }
+</style>
+{% endblock head %}
+
+{% block body %}
+<section class="container">
+
+<h1>Hello {{claims.first.name}},</h1>
+</section>
+<section class="container">
+<table>
+        <tr>
+                <th>Roll no</th>
+                <th>Class</th>
+                <th>Date</th>
+                <th>Preclaim</th>
+                <th>Council</th>
+                <th>SIS</th>
+        </tr>
+        {% for claim in claims %}
+    <tr>
+        <td>{{claim.student.roll_no}}</td>
+        <td>{{claim.period}}</td>
+        <td>{{claim.date}}</td>
+        <td>
+                {% if claim.pre_claim_approved %}
+                <i class="fa fa-check" aria-hidden="true"></i>                
+                {% else %}
+                <i class="fa fa-times" aria-hidden="true"></i>
+                {% endif %}
+        </td>
+        <td>
+                {% if claim.js_approved %}
+                <i class="fa fa-check" aria-hidden="true"></i>
+                
+                {% else %}
+                <i class="fa fa-times" aria-hidden="true"></i>
+                {% endif %}
+        </td>
+        <td>
+                {% if claim.sis_approved %}
+                <i class="fa fa-check" aria-hidden="true"></i>
+                
+                {% else %}
+                <i class="fa fa-times" aria-hidden="true"></i>
+                {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</section>
+
+{% endblock body %}

@@ -82,8 +82,9 @@ class ProcessClaimsView(TestCase):
     def test_process_claims(self):
         batch = Batch.objects.first()
         date = now()+timedelta(days=1)
-        if date.weekday == 6:
-            date = date+timedelta(days=1)
+
+        if date.weekday() == 6:
+            date = date+ timedelta(days=1)
         date = "{year}-{month}-{day}".format(year=date.year,month=date.month,day=date.day)
         r = self.client.get(reverse('class_data'),{
             'batch': batch.pk,
@@ -127,4 +128,7 @@ class ProcessClaimsView(TestCase):
         print(r.content.decode())
         print('--------------------')
         self.assertContains(r,'true')
-        self.assertEqual(len(Claim.objects.all()),l)
+        claims = Claim.objects.all()
+        self.assertEqual(len(claims),l)
+        for c in claims:
+            self.assertTrue(c.pre_claim_approved)

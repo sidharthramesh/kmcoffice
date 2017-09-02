@@ -15,16 +15,17 @@
     {% block head %}
     
     {% endblock head %}
-    <title>Venue Booking</title>
+    <title>{% block title %}
+    
+    {% endblock title %}</title>
 </head>
 <body>
 
     <main class="wrapper">
-        <nav class="navigation">
-            <section class="container">
-                <a href="/" class="navigation-title"><h3>KMC Venue Booking</h3></a>
-            </section>
-        </nav>
+        {% block nav %}
+
+        {% endblock nav %}
+        
     {% block body %}
     
     {% endblock body %}

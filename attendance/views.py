@@ -84,3 +84,10 @@ def process_claims(request):
             )
     
     return JsonResponse({"success":True})
+
+class StatusCheck(generic.ListView):
+    template_name = 'attendance/status.html'
+    context_object_name = 'claims'
+    def get_queryset(self, **kwargs):
+        queryset = Claim.objects.filter(student__roll_no=self.kwargs['roll_no'])
+        return queryset
