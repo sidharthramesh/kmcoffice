@@ -41,7 +41,7 @@ class UtilGcalTest(TestCase):
         self.assertEqual(len(classes),5)
         #print(classes)
         self.assertIsNotNone(classes[0].get('department'))
-        self.assertEqual(classes[0].get('department'),Department.objects.get(name='Pharmacology').pk)
+        self.assertEqual(classes[0].get('department'),Department.objects.get(name='Pharmacology'))
         self.assertIsNotNone(classes[0].get('location'))
 
 class PreClaimModelTest(TestCase):
@@ -61,9 +61,9 @@ class PreClaimModelTest(TestCase):
         
     def test_student_exists(self):
         self.assertIsNotNone(Student.objects.first())
-        print(PreClaim.objects.all())
-        print(User.objects.all())
-        print(User.objects.first())
+        #print(PreClaim.objects.all())
+        #print(User.objects.all())
+        #print(User.objects.first())
 class ProcessClaimsView(TestCase):
     def setUp(self):
         Batch.objects.create(
@@ -82,6 +82,7 @@ class ProcessClaimsView(TestCase):
         )
         for dept in depts.splitlines():
             Department.objects.create(name=dept)
+        
     def test_process_claims(self):
         batch = Batch.objects.first()
         date = now()+timedelta(days=1)
@@ -92,26 +93,26 @@ class ProcessClaimsView(TestCase):
         r = self.client.get(reverse('class_data'),{
             'batch': batch.pk,
             'date':date})
-        print('--------------------')
-        print("Get {}".format(reverse('class_data')))
-        print("Get params:", end=' ')
-        print({
+        #print('--------------------')
+        #print("Get {}".format(reverse('class_data')))
+        #print("Get params:", end=' ')
+        """print({
             'batch': batch.pk,
             'date':date})
-        
+        """
         data = json.loads(r.content.decode())
         l = len(data.get('classes'))
         self.assertEqual(l,data.get('number'))
         classes = data.get('classes')
 
-        print("Response {}".format(r.status_code))
-        print(r.content.decode())
+        #print("Response {}".format(r.status_code))
+        #print(r.content.decode())
         for c in classes:
             if c.get('department') is None:
                 c['department'] = 1
-        print('--------------------')
-        print("selecting 'department':1 for 'department':null")
-        print('--------------------')
+        #print('--------------------')
+        #print("selecting 'department':1 for 'department':null")
+        #print('--------------------')
         student_data = {
             'name':'Sidharth R',
             'email':'tornadoalert@gmail.com',
@@ -123,15 +124,18 @@ class ProcessClaimsView(TestCase):
         json_data = json.dumps(student_data)
         r = self.client.post(reverse('class_data'),json_data,
                                 content_type="application/json")
-        print("posting to {}".format(reverse('class_data')))
-        print("post payload",end=' ')
-        print(json_data)
-        print()
-        print("got response {}".format(r.status_code))
-        print(r.content.decode())
-        print('--------------------')
+        #print("posting to {}".format(reverse('class_data')))
+        #print("post payload",end=' ')
+        #print(json_data)
+        #print()
+        #print("got response {}".format(r.status_code))
+        #print(r.content.decode())
+        #print('--------------------')
         self.assertContains(r,'true')
         claims = Claim.objects.all()
         self.assertEqual(len(claims),l)
         for c in claims:
             self.assertTrue(c.pre_claim_approved)
+    def test_preclaim(self):
+        preclaim = PreClaim.objects.first()
+        print(preclaim.get_classes())

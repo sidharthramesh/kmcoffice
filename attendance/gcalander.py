@@ -30,7 +30,11 @@ def get_classes(date_string, batch):
     des = c.get('description')
     if not des is None:
 
-      dept = Department.objects.get(name=c.get('description')).pk
+      dept = Department.objects.filter(name=c.get('description'))
+      if len(dept) > 0:
+        dept = dept[0]
+      else:
+        dept = None
     else:
       
       dept = None

@@ -117,6 +117,5 @@ def delete_preclaim(request,pk):
         if f.is_valid():
             reason = f.cleaned_data.get('reason')
         preclaim.delete()
-
-        # send email deleted
+        send_mail("PreClaim Rejected", reason ,[preclaim.notification_email])
         return render(request,'attendance/dissapproved.html',{'reason':reason,'preclaim':preclaim})

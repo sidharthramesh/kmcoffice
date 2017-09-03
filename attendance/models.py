@@ -8,6 +8,8 @@ from django.utils import timezone
 from sesame import utils
 from django.contrib.auth.models import Permission, User
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 # Create your models here.
 class Department(models.Model):
     name = models.CharField(max_length=200)
@@ -65,6 +67,26 @@ class PreClaim(models.Model):
 
     def __str__(self):
         return str(self.event) + ' Preclaim'
+    def days(self):
+        delta = self.event.end_time - self.event.start_time
+        return delta.days
+    def get_classes(self):
+        from . import gcalander as gc
+        batches = Batch.objects.filter(active=True)
+        delta = self.event.end_time - self.event.start_time
+        #print(delta)
+        dates = [self.event.start_time.date() + timezone.timedelta(days=i) for i in range(delta.days+1)]
+        classes = []
+        for batch in batches:
+            for date in dates:
+                d = date.strftime('%Y-%m-%d')
+                cl = gc.get_classes(d,batch)
+                #print(cl)
+                for c in cl:
+                    if not c.get('name') in classes:
+                        classes.append(c.get('name'))
+        return classes 
+
     class Meta:
         permissions = (
             ('preclaim_dean_approve','Dean approval for Preclaim'),
@@ -80,7 +102,7 @@ def add_auth_token(link,login_token):
     return link
 @receiver(post_save, sender=PreClaim)
 def create_claims(sender, instance, created, **kwargs):
-    print("Running post save for PreClaim")
+    #print("Running post save for PreClaim")
     instance.students.clear()
     roll_nos = [line.split(' ')[0] for line in instance.add_roll_numbers.split('\n')]
     for roll in roll_nos:
@@ -93,13 +115,15 @@ def create_claims(sender, instance, created, **kwargs):
             login_token = utils.get_parameters(user)
             approve_link = reverse('approve_preclaim',kwargs={'pk':instance.pk})
             approve_link = add_auth_token(approve_link,login_token)
-            print(approve_link)
+            #print(approve_link)
             disapprove_link = reverse('disapprove_preclaim',kwargs={'pk':instance.pk})
             disapprove_link = add_auth_token(disapprove_link,login_token)
-            print(disapprove_link)
-            body = "To approve click {a}. To disapprove {d}".format(a=approve_link,d=disapprove_link)
-            print(body)
-            send_mail("PreClaim Approval",body,'sidharth@mail.manipalconnect.com',[user.email])
+            #print(disapprove_link)
+            approve_link = 'http://localhost:8000'+approve_link
+            disapprove_link = 'http://localhost:8000'+disapprove_link
+            body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':instance})
+            #print(body)
+            send_mail("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
 
 
 
@@ -145,4 +169,3 @@ def add_serial_number(sender,instance, **kwargs):
     
     
 
-    
