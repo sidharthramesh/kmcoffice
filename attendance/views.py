@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .models import *
 from .gcalander import get_classes
@@ -6,6 +6,8 @@ from django.views import generic
 from json import loads
 from .forms import StudentForm, PeriodForm
 from django.utils import dateparse
+from django.contrib.auth.decorators import permission_required
+from .forms import ConfirmForm, StatusForm
 # Create your views here.
 def index(request):
     return render(request,'attendance/student_claims.html',{'periodform':PeriodForm, 'studentform':StudentForm})
@@ -85,9 +87,36 @@ def process_claims(request):
     
     return JsonResponse({"success":True})
 
-class StatusCheck(generic.ListView):
-    template_name = 'attendance/status.html'
-    context_object_name = 'claims'
-    def get_queryset(self, **kwargs):
-        queryset = Claim.objects.filter(student__roll_no=self.kwargs['roll_no'])
-        return queryset
+def status_redirect(request):
+    if request.GET.get('roll_no'):
+        queryset = Claim.objects.filter(student__roll_no=request.GET.get('roll_no'))
+        return render(request,'attendance/status.html',{'claims':queryset})
+    else:
+        return render(request,'attendance/status_form.html',{'form':StatusForm})
+
+
+@permission_required('attendance.preclaim_dean_approve')
+def approve_preclaim(request, pk):
+    if request.method == 'GET':
+        preclaim = PreClaim.objects.get(pk=int(pk))
+        preclaim.dean_approved=True
+        preclaim.save()
+        send_mail("PreClaim Approved", "The PreClaim has been approved.",'sidharth@mail.manipalconnect.com',[preclaim.notification_email])
+        
+        return render(request,'attendance/approved.html',{'preclaim':preclaim})
+
+@permission_required('attendance.preclaim_dean_approve')
+def delete_preclaim(request,pk):
+    preclaim = PreClaim.objects.get(pk=int(pk))
+    if request.method == 'GET':
+        return render(request,'attendance/confirm.html',{'preclaim':preclaim,'form':ConfirmForm})
+    
+    if request.method == 'POST':
+        
+        f = ConfirmForm(request.POST)
+        if f.is_valid():
+            reason = f.cleaned_data.get('reason')
+        preclaim.delete()
+
+        # send email deleted
+        return render(request,'attendance/dissapproved.html',{'reason':reason,'preclaim':preclaim})

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'djcelery',
     'venue.apps.VenueConfig',
     'attendance.apps.AttendanceConfig',
     'flat_responsive',
@@ -143,3 +144,26 @@ db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 
 
+# Django sesame
+MIDDLEWARE += ['sesame.middleware.AuthenticationMiddleware']
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend', 'sesame.backends.ModelBackend']
+
+LOGIN_URL = '/admin/login'
+
+# Celery 
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = config("REDISCLOUD_URL", "django://")
+BROKER_POOL_LIMIT = 1
+BROKER_CONNECTION_MAX_RETRIES = None
+
+CELERY_TASK_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json", "msgpack"]
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+if BROKER_URL == "django://":
+    INSTALLED_APPS += ("kombu.transport.django",)
+
+BROKER_TRANSPORT_OPTIONS = {
+    "max_connections": 2,
+}

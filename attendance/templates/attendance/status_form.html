@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="container">
+    <form action="">
+        {{form.roll_no.label_tag}}
+        {{form.roll_no}}
+        {{form.errors}}
+        <input type="submit" value="Check Status">
+    </form>
+</section>
+{% endblock body %}

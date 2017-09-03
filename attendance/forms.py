@@ -31,3 +31,8 @@ class PeriodForm(forms.Form):
         except:
             raise forms.ValidationError("Cannot parse date")
 
+class ConfirmForm(forms.Form):
+    reason = forms.CharField(required=False,widget=forms.Textarea())
+
+class StatusForm(forms.Form):
+    roll_no = forms.IntegerField()

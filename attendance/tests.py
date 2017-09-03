@@ -46,6 +46,7 @@ class UtilGcalTest(TestCase):
 
 class PreClaimModelTest(TestCase):
     def setUp(self):
+        User.objects.create_superuser('sid','tornadoalert@gmail.com','Supernova-7')
         rolls = """150101312 Sidharth\n150101222 Someone\n122332232 Another person"""
         event = Event.objects.create(
             name="Test Event",
@@ -55,12 +56,14 @@ class PreClaimModelTest(TestCase):
         preclaim = PreClaim.objects.create(
             add_roll_numbers=rolls,
             event = event,
+            notification_email = 'tornadoalert@gmail.com'
             )
         
     def test_student_exists(self):
         self.assertIsNotNone(Student.objects.first())
-    
-
+        print(PreClaim.objects.all())
+        print(User.objects.all())
+        print(User.objects.first())
 class ProcessClaimsView(TestCase):
     def setUp(self):
         Batch.objects.create(

@@ -1,8 +1,13 @@
 from django.db import models
+
+from django.shortcuts import reverse
 from venue.models import Venue
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from sesame import utils
+from django.contrib.auth.models import Permission, User
+from django.core.mail import send_mail
 # Create your models here.
 class Department(models.Model):
     name = models.CharField(max_length=200)
@@ -55,6 +60,7 @@ class PreClaim(models.Model):
     add_roll_numbers = models.TextField()
     event = models.ForeignKey(Event,models.CASCADE,'preclaims')
     dean_approved = models.BooleanField(default=False)
+    notification_email = models.EmailField()
     students = models.ManyToManyField(Student,'preclaims')
 
     def __str__(self):
@@ -63,16 +69,37 @@ class PreClaim(models.Model):
         permissions = (
             ('preclaim_dean_approve','Dean approval for Preclaim'),
         )
+def users_with_perm(perm_name):
+    return User.objects.filter(
+        is_superuser=True ,
+        user_permissions__codename=perm_name ,
+        groups__permissions__codename=perm_name).distinct()
 
+def add_auth_token(link,login_token):
+    link+='?method=magic&url_auth_token={}'.format(login_token['url_auth_token'])
+    return link
 @receiver(post_save, sender=PreClaim)
 def create_claims(sender, instance, **kwargs):
+    print("Running post save for PreClaim")
     instance.students.clear()
     roll_nos = [line.split(' ')[0] for line in instance.add_roll_numbers.split('\n')]
     for roll in roll_nos:
         student = Student.objects.get_or_create(roll_no=int(roll))
         instance.students.add(student[0])
     
-    #send mail to dean for confirmation
+    if instance.created:
+        users = [user for user in User.objects.all() if user.has_perm('attendance.preclaim_dean_approve')]
+        for user in users:
+            login_token = utils.get_parameters(user)
+            approve_link = reverse('approve_preclaim',kwargs={'pk':instance.pk})
+            approve_link = add_auth_token(approve_link,login_token)
+            print(approve_link)
+            disapprove_link = reverse('disapprove_preclaim',kwargs={'pk':instance.pk})
+            disapprove_link = add_auth_token(disapprove_link,login_token)
+            print(disapprove_link)
+            body = "To approve click {a}. To disapprove {d}".format(a=approve_link,d=disapprove_link)
+            print(body)
+            send_mail("PreClaim Approval",body,'sidharth@mail.manipalconnect.com',[user.email])
 
 
 

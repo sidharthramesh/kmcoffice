@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="container">
+    <p>Please provide a short reason why</p>
+    <form method="post" action="{% url 'disapprove_preclaim' preclaim.pk %}">
+            {% csrf_token %}
+            {{form.reason.label_tag}}{{form.reason}}
+    <input type="submit" value="Disapprove">
+    </form>
+</section>
+{% endblock body %}
