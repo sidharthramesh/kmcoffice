@@ -79,7 +79,7 @@ def add_auth_token(link,login_token):
     link+='?method=magic&url_auth_token={}'.format(login_token['url_auth_token'])
     return link
 @receiver(post_save, sender=PreClaim)
-def create_claims(sender, instance, **kwargs):
+def create_claims(sender, instance, created, **kwargs):
     print("Running post save for PreClaim")
     instance.students.clear()
     roll_nos = [line.split(' ')[0] for line in instance.add_roll_numbers.split('\n')]
@@ -87,7 +87,7 @@ def create_claims(sender, instance, **kwargs):
         student = Student.objects.get_or_create(roll_no=int(roll))
         instance.students.add(student[0])
     
-    if instance.created:
+    if created:
         users = [user for user in User.objects.all() if user.has_perm('attendance.preclaim_dean_approve')]
         for user in users:
             login_token = utils.get_parameters(user)
