@@ -12,3 +12,8 @@ script:
   - coverage run --source='.' manage.py test attendance
 
 after_success: coverage report
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: e2e4c81b-ac72-4370-ba60-3a746126b136
