@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'djcelery',
+    'django_celery_beat',
     'venue.apps.VenueConfig',
     'attendance.apps.AttendanceConfig',
     'flat_responsive',
@@ -150,20 +150,21 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend', 'sesame.
 
 LOGIN_URL = '/admin/login'
 
-# Celery 
-import djcelery
-djcelery.setup_loader()
-BROKER_URL = config("REDISCLOUD_URL", "django://")
+# Celery
 BROKER_POOL_LIMIT = 1
 BROKER_CONNECTION_MAX_RETRIES = None
 
 CELERY_TASK_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ["json", "msgpack"]
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-
-if BROKER_URL == "django://":
-    INSTALLED_APPS += ("kombu.transport.django",)
 
 BROKER_TRANSPORT_OPTIONS = {
     "max_connections": 2,
 }
+
+CELERY_BROKER_URL = config('REDIS_URL','redis://')
+
+BROKER_TRANSPORT_OPTIONS = {
+    "max_connections": 2,
+}
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
