@@ -1,19 +1,16 @@
 language: python
 python:
-  - "3.5"
+- '3.5'
 before_install:
-  - export DJANGO_SETTINGS_MODULE=kmcoffice.settings
-  - export python_files="tests.py test_*.py *_tests.py"
-install: 
-  - "pip install -r requirements.txt"
-  - pip install coverage
-
-script: 
-  - coverage run --source='.' manage.py test attendance
-
+- export DJANGO_SETTINGS_MODULE=kmcoffice.settings
+- export python_files="tests.py test_*.py *_tests.py"
+install:
+- pip install -r requirements.txt
+- pip install coverage
+script:
+- coverage run --source='.' manage.py test attendance
 after_success: coverage report
-
 deploy:
   provider: heroku
   api_key:
-    secure: e2e4c81b-ac72-4370-ba60-3a746126b136
+    secure: uV86jOBNkAIpb9sb7OikhjFYnWAeEblBQ06lv17rQXTtjJqamx6VZ+QSs3G9yhSPSHmmAboP/r+p3Azq705eWVBVSaEoD6G099kPfPVmhftAAAYs7qAAARVhjnPKfxuz9F5wITD3OftRS7nakfbGYZ1CeGtwn7hfsDGr1ock4csLbry9tAgZLqtsv3nTdSB95O2PFGH3xTnoTKAEK+PZusTWZKYA0R5q9yXPEnuTLzWR0dyMIGL9r8SRBNPNEMKMXruDySUJKeECRPSALB6SdCcSTlOPseycJ3scs6njwMsrYKZoO0DZyzUz5QDc0HNN3dMJ3QWXPtmLAPzy2cgUBdNrzonWxAIcyKhO+ah/LoqV1St5zZwoM06mLRYUswe64/mHexbps1ARPF1j83X33yInnHLqE7vk5+3CLuSaKmDkCUlrBiNmAOZhlV2uVY/hnEI9b7Q/Su2kaZM8ZoMhhhNXmbTjmpzvanlnazJFxhQ3vu7vxtnXPXz2WF7bI1e1KlgvdSamN4rNgj6cACgiNVqhhOhEaAeP7qPQmH7dKFPp7SfZI2nupF2c7lx6gxVwoUNFKHB7loF82K6B+sqz1Tkv5MkB+izUP7joAjZjVDN7hU/n5FFbKbs9aunkJZcoxZUmAAJ93RMc48tcGUQFf74FUNiymIAqmxrVQf2IL9U=
