@@ -1,3 +1,4 @@
+// var moment = require('moment');
 var viewport = document.getElementById('viewport');
 var buttonTray = document.getElementById('buttonTray');
 
@@ -150,6 +151,8 @@ function updateClasses (date, year, batch) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var dayClasses = JSON.parse(this.responseText);
+      dayClasses = dayClasses.classes;
+      console.log(dayClasses);
       var dayClasses_length = dayClasses.length;
       var doc = document;
       var container = document.getElementById('classes_datedList');
@@ -158,9 +161,10 @@ function updateClasses (date, year, batch) {
         var ele = doc.createElement('div');
         var txt = '<div><h2>CLASS_NAME</h2><p>START_TIME - END_TIME</p><span>DATE</span><div>DEPT</div><div class="validation"></div></div><div><img src="/static/checkbox-unchecked.png"/><input type="hidden"/></div>';
         txt = txt.replace('CLASS_NAME', dayClasses[i].name);
-        txt = txt.replace('START_TIME', dayClasses[i].start_time);
-        txt = txt.replace('END_TIME', dayClasses[i].end_time);
-        txt = txt.replace('DATE', dayClasses[i].date);
+        txt = txt.replace('START_TIME', moment(dayClasses[i].start).format('LT'));
+        txt = txt.replace('END_TIME', moment(dayClasses[i].end).format('LT'));
+        txt = txt.replace('DATE', moment(dayClasses[i].date).format('ll'));
+        console.log(txt)
         if (dayClasses[i].department instanceof Array) {
           var dpt_txt = "<select><option>Select the department</option><option>" + dayClasses[i].department.join("</option><option>") + "</option></select>";
           txt = txt.replace('DEPT', dpt_txt);
@@ -204,7 +208,7 @@ function updateClasses (date, year, batch) {
       }
     }
   };
-  xhttp.open("GET", "/classdata?date=" + date + "&batch=" + year + "+Year+Batch+" + batch, true);
+  xhttp.open("GET", "/attendance/class_data?date=" + date + "&batch=1", true);
   xhttp.send();
   document.getElementById('classes_otherClasses').className = "noshow";
   document.getElementById('classes_otherClasses_date').innerHTML = date;
@@ -322,7 +326,7 @@ function harvest () {
 };
 function sendReq () {
   var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("POST", '/classdata');
+  xmlhttp.open("POST", '/attendance/class_data');
   xmlhttp.setRequestHeader("Content-Type", "application/json");
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
