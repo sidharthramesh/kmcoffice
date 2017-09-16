@@ -6,7 +6,7 @@ services:
 install:
 - pip install -r requirements.txt
 script:
-- python manage.py test
+- python manage.py test --settings=kmcoffice.settings_test
 deploy:
   provider: heroku
   api_key:
