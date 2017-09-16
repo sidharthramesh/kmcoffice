@@ -152,7 +152,7 @@ function updateClasses (date, year, batch) {
     if (this.readyState == 4 && this.status == 200) {
       var dayClasses = JSON.parse(this.responseText);
       dayClasses = dayClasses.classes;
-      console.log(dayClasses);
+      // console.log(dayClasses);
       var dayClasses_length = dayClasses.length;
       var doc = document;
       var container = document.getElementById('classes_datedList');
