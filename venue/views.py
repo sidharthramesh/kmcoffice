@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import permission_required
 from attendance.tasks import send_email
 from django.shortcuts import reverse
 # Create your views here.
+from attendance.forms import ConfirmFormsss
 
 class BookEvent(generic.edit.CreateView):
     success_url = 'venue/thankyou'

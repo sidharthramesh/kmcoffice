@@ -51,5 +51,5 @@ def create_booking(sender, instance, created, **kwargs):
             disapprove_link = url+disapprove_link
             body = render_to_string('venue/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'booking':instance})
             #print(body)
-            send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
+            send_email.delay("Venue Booking Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
 
