@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from .models import Booking
 from .forms import VenueBookingForm, StatusForm
-
+from django.contrib.auth.decorators import permission_required
+from attendance.tasks import send_email
 # Create your views here.
 
 class BookEvent(generic.edit.CreateView):
@@ -40,4 +41,25 @@ class EventDetail(generic.UpdateView):
         return super(EventDetail, self).dispatch(
             request, *args, **kwargs)
 
+@permission_required('attendance.preclaim_dean_approve')
+def approve_booking(request, pk):
+    if request.method == 'GET':
+        booking = Booking.objects.get(pk=int(pk))
+        booking.status='3'
+        booking.save()
+        send_email.delay("Venue Booking Approved", "The Booking has been approved.",'sidharth@mail.manipalconnect.com',[booking.notification_email])
+        return render(request,'venue/approved.html',{'booking':booking})
+
+@permission_required('attendance.preclaim_dean_approve')
+def delete_booking(request,pk):
+    booking = Booking.objects.get(pk=int(pk))
+    if request.method == 'GET':
+        return render(request,'attendance/confirm.html',{'preclaim':booking,'form':ConfirmForm})
     
+    if request.method == 'POST':
+        f = ConfirmForm(request.POST)
+        if f.is_valid():
+            reason = f.cleaned_data.get('reason')
+        booking.delete()
+        send_email.delay("Booking Rejected", reason ,[preclaim.notification_email])
+        return render(request,'attendance/dissapproved.html',{'reason':reason,'preclaim':preclaim})

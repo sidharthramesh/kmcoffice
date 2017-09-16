@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 class VenueBookingForm(ModelForm):
     class Meta:
         model = Booking
-        fields = ['start_time','end_time','venue','title','description']
+        fields = ['start_time','end_time','venue','title','description','notification_email']
         labels = {
             "title":"Purpose of booking",
             "description":"More details about the event"

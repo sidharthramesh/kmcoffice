@@ -127,7 +127,6 @@ def create_claims(sender, instance, created, **kwargs):
             send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
 
 
-
 class Claim(models.Model):
     event = models.ForeignKey(Event,models.CASCADE,'claims')
     period = models.ForeignKey(Period,related_name='claims')
