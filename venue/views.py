@@ -8,7 +8,7 @@ from django.shortcuts import reverse
 # Create your views here.
 
 class BookEvent(generic.edit.CreateView):
-    success_url = reverse('thankyou')
+    success_url = 'venue/thankyou'
     form_class = VenueBookingForm
     template_name = 'venue/booking_form.html'
 
