@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from sesame import utils
 from django.contrib.auth.models import Permission, User
-from django.core.mail import send_mail
+from .tasks import send_email
 from django.template.loader import render_to_string
 
 # Create your models here.
@@ -119,11 +119,12 @@ def create_claims(sender, instance, created, **kwargs):
             disapprove_link = reverse('disapprove_preclaim',kwargs={'pk':instance.pk})
             disapprove_link = add_auth_token(disapprove_link,login_token)
             #print(disapprove_link)
-            approve_link = 'http://localhost:8000'+approve_link
-            disapprove_link = 'http://localhost:8000'+disapprove_link
+            url = 'http://localhost:8000'
+            approve_link = url+approve_link
+            disapprove_link = url+disapprove_link
             body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':instance})
             #print(body)
-            send_mail("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
+            send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
 
 
 

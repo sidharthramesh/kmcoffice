@@ -8,6 +8,7 @@ from .forms import StudentForm, PeriodForm
 from django.utils import dateparse
 from django.contrib.auth.decorators import permission_required
 from .forms import ConfirmForm, StatusForm
+from .tasks import send_email
 # Create your views here.
 def index(request):
     return render(request,'attendance/student_claims.html',{'periodform':PeriodForm, 'studentform':StudentForm})
@@ -101,7 +102,7 @@ def approve_preclaim(request, pk):
         preclaim = PreClaim.objects.get(pk=int(pk))
         preclaim.dean_approved=True
         preclaim.save()
-        send_mail("PreClaim Approved", "The PreClaim has been approved.",'sidharth@mail.manipalconnect.com',[preclaim.notification_email])
+        send_email.delay("PreClaim Approved", "The PreClaim has been approved.",'sidharth@mail.manipalconnect.com',[preclaim.notification_email])
         
         return render(request,'attendance/approved.html',{'preclaim':preclaim})
 
@@ -117,5 +118,5 @@ def delete_preclaim(request,pk):
         if f.is_valid():
             reason = f.cleaned_data.get('reason')
         preclaim.delete()
-        send_mail("PreClaim Rejected", reason ,[preclaim.notification_email])
+        send_email.delay("PreClaim Rejected", reason ,[preclaim.notification_email])
         return render(request,'attendance/dissapproved.html',{'reason':reason,'preclaim':preclaim})
