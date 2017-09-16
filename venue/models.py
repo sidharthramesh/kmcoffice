@@ -46,10 +46,10 @@ def create_booking(sender, instance, created, **kwargs):
             disapprove_link = reverse('disapprove_booking',kwargs={'pk':instance.pk})
             disapprove_link = add_auth_token(disapprove_link,login_token)
             #print(disapprove_link)
-            url = 'http://localhost:8000'
+            url = 'http://kmcoffice.herokuapp.com'
             approve_link = url+approve_link
             disapprove_link = url+disapprove_link
-            body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':instance})
+            body = render_to_string('venue/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'booking':instance})
             #print(body)
             send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
 

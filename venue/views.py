@@ -4,10 +4,11 @@ from .models import Booking
 from .forms import VenueBookingForm, StatusForm
 from django.contrib.auth.decorators import permission_required
 from attendance.tasks import send_email
+from django.shortcuts import reverse
 # Create your views here.
 
 class BookEvent(generic.edit.CreateView):
-    success_url = '/thankyou'
+    success_url = reverse('thankyou')
     form_class = VenueBookingForm
     template_name = 'venue/booking_form.html'
 
