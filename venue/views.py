@@ -9,7 +9,7 @@ from django.shortcuts import reverse
 from attendance.forms import ConfirmForm
 
 class BookEvent(generic.edit.CreateView):
-    success_url = 'venue/thankyou'
+    success_url = 'thankyou'
     form_class = VenueBookingForm
     template_name = 'venue/booking_form.html'
 
