@@ -10,6 +10,6 @@ def ping():
     r = requests.post("https://requestb.in/1dvp3ch1",{"hello":"World"})
     return r.status_code
 
-@task
+@shared_task
 def send_email(*args,**kwargs):
     return mail(*args,**kwargs)

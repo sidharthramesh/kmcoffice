@@ -10,6 +10,10 @@ from django.contrib.auth.decorators import permission_required
 from .forms import ConfirmForm, StatusForm
 from .tasks import send_email
 # Create your views here.
+
+def home(request):
+    return render(request,'home.html',{})
+
 def index(request):
     return render(request,'attendance/student_claims.html',{'periodform':PeriodForm, 'studentform':StudentForm})
 
