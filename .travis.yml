@@ -1,14 +1,10 @@
 language: python
 python:
 - '3.5'
-before_install:
-- export DJANGO_SETTINGS_MODULE=kmcoffice.settings
-- export python_files="tests.py test_*.py *_tests.py"
 install:
 - pip install -r requirements.txt
 script:
 - python manage.py test
-after_success: coverage report
 deploy:
   provider: heroku
   api_key:
