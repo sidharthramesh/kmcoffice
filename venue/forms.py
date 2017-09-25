@@ -26,7 +26,12 @@ class VenueBookingForm(ModelForm):
             calids.append(batch.calander_id)
         for eventcal in eventcals:
             calids.append(eventcal.calander_id)
-        
+        scopes = ['https://www.googleapis.com/auth/calendar.readonly']
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(
+            'account.json', scopes,
+        )
+        http = credentials.authorize(httplib2.Http())
+        service = build('calendar', 'v3', http=http)
         for cal in calids:
             events = service.events().list(
                 calendarId=cal,
