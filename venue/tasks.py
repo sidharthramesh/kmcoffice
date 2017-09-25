@@ -12,7 +12,9 @@ def insert_event(name,location,descripion,start,end,calId='mpo2f09j62aolu1jlgd7r
         'account.json', scopes,
     )
     http = credentials.authorize(httplib2.Http())
-    service = discovery.build('calendar', 'v3', http=http)
+    service = build('calendar', 'v3', http=http)
+    start = start.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    end = end.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     event = {
     'summary': name,
     'location': location,
@@ -30,5 +32,6 @@ def insert_event(name,location,descripion,start,end,calId='mpo2f09j62aolu1jlgd7r
         ],
     },
     }
+    
     event = service.events().insert(calendarId=calId, body=event).execute()
     return event
