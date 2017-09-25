@@ -194,12 +194,15 @@
 						<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 							<tr>
 								<td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
-									<h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">Dear Dean</h1>
+									<h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">Madam Dean</h1>
                                     <p style="margin: 0;">Venue Booking for {{booking.title}} at {{booking.venue.name}} needs your approval.</p>
+                                    <br>
                                     <p style="margin: 0;">Venue: {{booking.venue.name}}</p>
                                     <p style="margin: 0;">Date: {{booking.start_time|date:'D d F'}}</p>
-									<p style="margin: 0;">Time: {{booking.start_time|date:'f A'}} to {{booking.end_time|date:'f A'}}</p>
+                                    <p style="margin: 0;">Time: {{booking.start_time|date:'f A'}} to {{booking.end_time|date:'f A'}}</p>
+        
                                     {% if booking.description %}
+                                    <br>
                                     <p style="margin: 0;">Description: {{booking.description}}</p>
                                     {% endif %}
                                     
