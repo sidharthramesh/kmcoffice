@@ -59,7 +59,7 @@ def approve_booking(request, pk):
             booking.end_time
             )
         
-        send_email.delay("Venue Booking Approved", "The Booking has been approved.",'sidharth@mail.manipalconnect.com',[booking.notification_email])
+        send_email.delay("Venue Booking Approved", "The Booking for {}  at {} has been approved.".format(booking.title,booking.venue.name),'sidharth@mail.manipalconnect.com',[booking.notification_email])
         return render(request,'venue/approved.html',{'booking':booking})
 
 @permission_required('attendance.preclaim_dean_approve')
