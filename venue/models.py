@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
 from attendance.tasks import send_email
-import random
+from .quotes import get_random_quote
 # Create your models here.
 
 class Venue(models.Model):
@@ -50,25 +50,13 @@ def create_booking(sender, instance, created, **kwargs):
             url = 'http://kmcoffice.herokuapp.com'
             approve_link = url+approve_link
             disapprove_link = url+disapprove_link
-            quotes = [
-                'Quote1',
-                'Quote2',
-                'Quote3',
-                'Quote4',
-                'Quote5',
-                'Quote6',
-                'Quote7',
-                'Quote8',
-                'Quote9',
-                'Quote10',
-                ]
             quote = quote[random.randint(0,len(quotes)-1)]
             body = render_to_string(
                 'venue/email/dean.html',{
                     'approve':approve_link,
                     'disapprove':disapprove_link,
                     'booking':instance,
-                    'quote':quote})
+                    'quote':get_random_quote()})
             #print(body)
             send_email.delay("Venue Booking Approval",'',from_email='venuebooking@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
             
