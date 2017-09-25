@@ -171,4 +171,11 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_ALWAYS_EAGER = True
 
+if 'account.json' not in os.listdir():
+    print("[+] Writing json keyfile")
+    cypher = Fernet(config('FERNET_KEY').encode())
+    string = cypher.decrypt(config('ENCRYPT_GOOGLE').encode())
+    with open('account.json','wb') as f:
+        f.write(string)
+
 #TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
