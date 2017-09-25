@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
     <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
-    <title>{{preclaim.event.name}} claims needs your approval</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+    <title>{{booking.tile}} needs your approval</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
     <!-- Web Font / @font-face : BEGIN -->
 	<!-- NOTE: If web fonts are not required, lines 10 - 27 can be safely removed. -->
@@ -195,9 +195,14 @@
 							<tr>
 								<td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
 									<h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">Dear Dean</h1>
-									<p style="margin: 0;">Venue Booking for {{booking.tile}} at {{booking.venue.name}} needs your approval.</p>
-									<p style="margin: 0;">Description: {{booking.description}}</p>
+                                    <p style="margin: 0;">Venue Booking for {{booking.title}} at {{booking.venue.name}} needs your approval.</p>
+                                    <p style="margin: 0;">Venue: {{booking.venue.name}}</p>
+                                    <p style="margin: 0;">Date: {{booking.start_time|date:'D d F'}}</p>
 									<p style="margin: 0;">Time: {{booking.start_time|date:'f A'}} to {{booking.end_time|date:'f A'}}</p>
+                                    {% if booking.description %}
+                                    <p style="margin: 0;">Description: {{booking.description}}</p>
+                                    {% endif %}
+                                    
 									
 								</td>
 							</tr>

@@ -32,7 +32,7 @@ class EventDetail(generic.UpdateView):
     model = Booking
     fields = ['status']
     template_name = 'venue/detail.html'
-    success_url = '/list' 
+    success_url = '/venue/list'
     def user_passes_test(self, request):
         if request.user.is_authenticated():
             return True
