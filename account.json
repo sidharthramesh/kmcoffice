@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "attendance-claims",
+  "private_key_id": "2618cc3b3fc5af7501b53f05f791d7c4c2a5e340",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCj8zTmuCP35Fcz\nfVi7EAOjpOD3c9uXF1A46EiZxvd3SWePwRNJcj1d07VmE/usR5Shpw/n3p6he2P+\nu0+ssqXfFNdlP7KFeiOT6sEcqZbTEDFemiSggBH2gimuDT00c75oWvhatcUuJqkK\ngXQyM2TVPDUMvEj0bPp8sj6P+UD2wzbN2IbXpllS03LPuQqDoTki5YLWBPBaB2gI\n/gkpEH5ZZG7PN9YFpchlrGncnG2X/g7nWXpacG/c+6R6mXA8q8p7GWzU+1Wq6kDu\nCqf6onA1ZUX0nguxjwZy/QZ27F3ucAwvHQfo8GjqSmAf94TfJbZWFB+tLooQYmBV\nSutg8KvZAgMBAAECggEAE8u5QNztyeAWJ9tMEA0pVVRijfpdIq+P0gk4/+laZrq0\nIJNIYgNDVd2KzvwddKIxd/nRJbb3einJC4BAKOrqtIaCkgD4jB2Q52quXci703kG\nbwTnZIJGOPijMfb7A4bwsA7A40oEmJOWMFSsbCXQuF8ETEj9OZchgRYwD+gBkDHV\nGCeZrxdGfxeKcs0hBCdDjDhUD7YhdP/wgKTJ2oONoBG2HTG/96+yZMQjOMzsnI1e\niXae1gHnekTqKzJq1HXk54gl+SrCcJntAJbXEe93Os9smcnDlsOehVe4n9Zy/2kU\neeDSUg/PQSOMLmQGJKK2ELkNkhiap1BCj/6hAyqY8QKBgQDfH7ar6spbGw/wX7NX\nr7FWJzgv16yqcMZ/5sDG6OnGjBA8753TFAz6ZWTvDQIKWlaOFfkecXt2hQuijxH9\nP/W9GC9RDV10AcGgkeE7kbHPUWOIE2Rr1RZwAngWd5F6LX5eeUYMHEaVCf+SXVDk\nXnI0maRSQrv8SoEAGWXfqAeXsQKBgQC8G3DoI3tYPmLtapa6MNhTCExOPZsLd+PJ\nmHACj7ChlLHycZM8m6Roe95KMWaB0Ed4L3w+h+Y1zGffAmUH0by/1J6bxHy/CYiX\n3gd1ILXfhqf5RywphfLlC97c8uCO+Th/zyc0UixNaeJ8E0WVhLJ/VQOKlt9Pk4EL\nuV38pjAIqQKBgEvUWl/JFuapptwZmjjl1A4knBreYKc4Vq3nPYMcaz74IRikku3G\ntbZvuULpF9Vu6FW3sAehp8Ua6F5h40o/b4PJcWNJeIZRhn3MtlBpbpW34my/snRX\nYh3FKQzxq/Zq+bSf4KeDAJXsZPhYUIKcepHX2Zm/ZmYS6A6hkxbU42exAoGAJNS6\nprlLzVtpw1K7cHlf4eIeDrPBR92RnEdcpyO7Uefrb60NRzCyYELgo2ZIy+IcHEwv\n5450ZNRBAklVvtIyQt0+sQEn67/SHuo6S5S8B6g1+3kUDI1NoctRN7HWhigGCABn\njLcKNZ4l2mVrmnsA+C2NI/Wmg8491i3VWUKw5QECgYAUZoUMUvjgzpG0txm6Fs1H\nSFwMuc3RYrJi2EBJCDVV5AMWTU1uP63HPItimaYn//XF4OF6tYfsHNklr/mCFgK9\n/B3/RI61pqnAYbhmveDTbVNs56uWqkPK86tn6eF28UY5dsdlIvnTv8Cb1JsXxVCl\nyUZITfcqswc6vL/VZcAJbw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "calander@attendance-claims.iam.gserviceaccount.com",
+  "client_id": "113616154980865185625",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/calander%40attendance-claims.iam.gserviceaccount.com"
+}
