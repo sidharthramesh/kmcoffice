@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import permission_required
 from attendance.tasks import send_email
 from django.shortcuts import reverse
 from .tasks import insert_event
+from attendance.models import Batch
+from  .models import EventCalander
 # Create your views here.
 from attendance.forms import ConfirmForm
 
@@ -75,3 +77,8 @@ def delete_booking(request,pk):
         booking.delete()
         send_email.delay("Booking Rejected", reason ,[preclaim.notification_email])
         return render(request,'attendance/dissapproved.html',{'reason':reason,'preclaim':preclaim})
+
+def download_calanders(request):
+    batches = Batch.objects.filter(active=True)
+    eventcals = EventCalander.objects.filter(active=True)
+    return render(request,'calander_download.html',{'batches':batches,'eventcals':eventcals})

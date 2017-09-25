@@ -23,8 +23,8 @@ class VenueBookingForm(ModelForm):
         end_time = cleaned_data.get('end_time')
         venue = cleaned_data.get('venue')
         # Check all calandars in database and eventCal for the venue and time
-        batches = Batch.objects.all()
-        eventcals = EventCalander.objects.all()
+        batches = Batch.objects.filter(active=True)
+        eventcals = EventCalander.objects.filter(active=True)
         calids = []
         for batch in batches:
             calids.append(batch.calander_id)
