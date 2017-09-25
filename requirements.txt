@@ -14,7 +14,7 @@ django-decouple==2.1
 django-flat-responsive==1.4.1
 django-sesame==1.2
 django-tastypie==0.14.0
-google-api-python-client==1.6.3
+google-api-python-client==1.6.4
 gunicorn==19.7.1
 httplib2==0.10.3
 idna==2.6
@@ -23,8 +23,8 @@ newrelic==2.92.0.78
 oauth2client==4.1.2
 psycopg2==2.7.3
 py==1.4.34
-pyasn1==0.3.3
-pyasn1-modules==0.1.1
+pyasn1==0.3.6
+pyasn1-modules==0.1.4
 pytest==3.2.1
 pytest-django==3.1.2
 python-dateutil==2.6.1
@@ -33,7 +33,7 @@ pytz==2017.2
 redis==2.10.6
 requests==2.18.4
 rsa==3.4.2
-six==1.10.0
+six==1.11.0
 tzlocal==1.4
 uritemplate==3.0.0
 urllib3==1.22

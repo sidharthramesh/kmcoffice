@@ -5,6 +5,7 @@ from .forms import VenueBookingForm, StatusForm
 from django.contrib.auth.decorators import permission_required
 from attendance.tasks import send_email
 from django.shortcuts import reverse
+from .tasks import insert_event
 # Create your views here.
 from attendance.forms import ConfirmForm
 
@@ -49,6 +50,15 @@ def approve_booking(request, pk):
         booking = Booking.objects.get(pk=int(pk))
         booking.status='3'
         booking.save()
+        # create google calander event
+        insert_event(
+            booking.title,
+            booking.venue.name,
+            booking.description,
+            booking.start_time,
+            booking.end_time
+            )
+        
         send_email.delay("Venue Booking Approved", "The Booking has been approved.",'sidharth@mail.manipalconnect.com',[booking.notification_email])
         return render(request,'venue/approved.html',{'booking':booking})
 
