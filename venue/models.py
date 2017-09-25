@@ -50,7 +50,6 @@ def create_booking(sender, instance, created, **kwargs):
             url = 'http://kmcoffice.herokuapp.com'
             approve_link = url+approve_link
             disapprove_link = url+disapprove_link
-            quote = quote[random.randint(0,len(quotes)-1)]
             body = render_to_string(
                 'venue/email/dean.html',{
                     'approve':approve_link,

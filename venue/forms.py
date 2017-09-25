@@ -4,6 +4,10 @@ from .models import Booking
 from django.contrib.auth.forms import AuthenticationForm
 from attendance.models import Batch
 from .models import EventCalander
+import json
+import httplib2
+from oauth2client.service_account import ServiceAccountCredentials
+from apiclient.discovery import build
 class VenueBookingForm(ModelForm):
     class Meta:
         model = Booking
@@ -42,8 +46,8 @@ class VenueBookingForm(ModelForm):
             print(events)
             if len(events) > 0:
                 for event in events:
-                    if event["location"] == venue.name:
-                        raise ValidationError("{} not available at requested time because of {}".format(venue.name,event["summary"]))
+                    if event.get("location") == venue.name:
+                        raise ValidationError("{} is not available at requested time slot because of clash with {}".format(venue.name,event["summary"]))
         return cleaned_data
 
 class StatusForm(ModelForm):
