@@ -33,6 +33,6 @@ def insert_event(name,location,descripion,start,end,calId='mpo2f09j62aolu1jlgd7r
         ],
     },
     }
-    
+
     event = service.events().insert(calendarId=calId, body=event).execute()
     return event
