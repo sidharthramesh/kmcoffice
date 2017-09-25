@@ -19,6 +19,7 @@ from venue import views
 from venue.forms import LoginForm
 from django.contrib.auth import views as authviews
 from attendance import views
+from venue.views import download_calanders
 urlpatterns = [
     url(r'^$',views.home,name='home'),
     url(r'^admin/', admin.site.urls),
@@ -26,4 +27,5 @@ urlpatterns = [
     url(r'^logout/$', authviews.logout, {'next_page': '/list'}, name='logout'),
     url(r'^venue/',include('venue.urls'),name='venue'),
     url(r'^attendance/',include('attendance.urls'),name='attendance'),
+    url(r'^calanders/',download_calanders,name='cals'),
 ]

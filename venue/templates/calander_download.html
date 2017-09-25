@@ -1,0 +1,22 @@
+{% extends "venue/base.html" %}
+{% block body %}
+<section class="container">
+    <h3>Batch Timetables</h3>
+<ul>
+    {% for batch in batches %}
+    <li>
+        <a href="https://calendar.google.com/calendar/ical/{{batch.calander_id|urlencode}}/public/basic.ics">{{batch.semester}} {{batch.batch}}</a>
+    </li>
+    {% endfor %}
+    
+</ul>
+<h3>Events</h3>
+<ul>
+        {% for cal in eventcals %}
+        <li>
+            <a href="https://calendar.google.com/calendar/ical/{{cal.calander_id|urlencode}}/public/basic.ics">{{cal.name}}</a>
+        </li>
+        {% endfor %}
+</ul>
+</section>
+{% endblock body %}
