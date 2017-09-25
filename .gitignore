@@ -114,3 +114,4 @@ run.bat
 
 #Staticfiles
 staticfiles/*
+account.json

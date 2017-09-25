@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from decouple import config
+from cryptography.fernet import Fernet
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -168,3 +169,10 @@ BROKER_TRANSPORT_OPTIONS = {
 }
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+if 'account.json' not in os.listdir():
+    print("[+] Writing json keyfile")
+    cypher = Fernet(config('FERNET_KEY').encode())
+    string = cypher.decrypt(config('ENCRYPT_GOOGLE').encode())
+    with open('account.json','wb') as f:
+        f.write(string)

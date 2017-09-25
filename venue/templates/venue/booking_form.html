@@ -30,7 +30,10 @@
                     {{form.end_time}}
                     </div>
                     </div>
-
+                {% for error in form.non_field_errors %}
+                {{error|escape}}
+                {% endfor %}
+                <br>
         <input type="submit" value="Book">
             </fieldset>
         </form>
