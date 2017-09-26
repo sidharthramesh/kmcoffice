@@ -43,8 +43,8 @@ class VenueBookingForm(ModelForm):
             events = service.events().list(
                 calendarId=cal,
                 singleEvents=True,
-                timeMin=start_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
-                timeMax=end_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+                timeMin=start_time.strftime("%Y-%m-%dT%H:%M:%S.%f+05:30"),
+                timeMax=end_time.strftime("%Y-%m-%dT%H:%M:%S.%f+05:30"),
                 ).execute()["items"]
             print(events)
             if len(events) > 0:
