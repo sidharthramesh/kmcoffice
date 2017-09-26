@@ -22,6 +22,9 @@ class VenueBookingForm(ModelForm):
         start_time = cleaned_data.get('start_time')
         end_time = cleaned_data.get('end_time')
         venue = cleaned_data.get('venue')
+        if start_time > end_time:
+            print(start_time)
+            raise ValidationError("The start time is after the end time")
         # Check all calandars in database and eventCal for the venue and time
         batches = Batch.objects.filter(active=True)
         eventcals = EventCalander.objects.filter(active=True)
