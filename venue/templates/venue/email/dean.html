@@ -198,9 +198,11 @@
                                     <p style="margin: 0;">Venue Booking for {{booking.title}} at {{booking.venue.name}} needs your approval.</p>
                                     <br>
                                     <p style="margin: 0;">Venue: {{booking.venue.name}}</p>
-                                    <p style="margin: 0;">Date: {{booking.start_time|date:'D d F'}}</p>
-                                    <p style="margin: 0;">Time: {{booking.start_time|date:'f A'}} to {{booking.end_time|date:'f A'}}</p>
-        
+                                    {% if booking.multiday %}
+                                    <p style="margin: 0;">Time: {{booking.start_time|date:'d F'}} {{booking.start_time|date:'f A'}} to {{booking.end_time|date:'d F'}} {{booking.end_time|date:'f A'}}</p>
+                                    {% else %}
+                                    <p style="margin: 0;">Time: {{booking.start_time|date:'d F'}} {{booking.start_time|date:'f A'}} to {{booking.end_time|date:'f A'}}</p>
+                                    {% endif %}
                                     {% if booking.description %}
                                     <br>
                                     <p style="margin: 0;">Description: {{booking.description}}</p>

@@ -14,8 +14,8 @@ def insert_event(name,location,descripion,start,end,calId='mpo2f09j62aolu1jlgd7r
     )
     http = credentials.authorize(httplib2.Http())
     service = build('calendar', 'v3', http=http)
-    start = start.strftime("%Y-%m-%dT%H:%M:%S.%f+5:30")
-    end = end.strftime("%Y-%m-%dT%H:%M:%S.%f+5:30")
+    start = start.strftime("%Y-%m-%dT%H:%M:%S.%f+05:30")
+    end = end.strftime("%Y-%m-%dT%H:%M:%S.%f+05:30")
     event = {
     'summary': name,
     'location': location,

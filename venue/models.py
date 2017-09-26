@@ -29,7 +29,12 @@ class Booking(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+    def multiday(self):
+        if self.start_time.day == self.end_time.day:
+            return False
+        else:
+            return True
 
 def add_auth_token(link,login_token):
     link+='?method=magic&url_auth_token={}'.format(login_token['url_auth_token'])
