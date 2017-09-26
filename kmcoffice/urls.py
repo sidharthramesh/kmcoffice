@@ -27,5 +27,5 @@ urlpatterns = [
     url(r'^logout/$', authviews.logout, {'next_page': '/list'}, name='logout'),
     url(r'^venue/',include('venue.urls'),name='venue'),
     url(r'^attendance/',include('attendance.urls'),name='attendance'),
-    url(r'^calanders/',download_calanders,name='cals'),
+    url(r'^calendars/',download_calanders,name='cals'),
 ]
