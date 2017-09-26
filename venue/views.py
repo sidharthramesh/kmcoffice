@@ -61,22 +61,22 @@ def approve_booking(request, pk):
             booking.end_time
             )
         
-        send_email.delay("Venue Booking Approved", "The Booking for {}  at {} has been approved.".format(booking.title,booking.venue.name),'sidharth@mail.manipalconnect.com',[booking.notification_email])
+        send_email.delay("Venue Booking Approved", "The Booking for {}  at {} has been approved.".format(booking.title,booking.venue.name),'venue@mail.manipalconnect.com',[booking.notification_email])
         return render(request,'venue/approved.html',{'booking':booking})
 
 @permission_required('attendance.preclaim_dean_approve')
 def delete_booking(request,pk):
     booking = Booking.objects.get(pk=int(pk))
     if request.method == 'GET':
-        return render(request,'attendance/confirm.html',{'preclaim':booking,'form':ConfirmForm})
+        return render(request,'venue/confirm.html',{'booking':booking,'form':ConfirmForm})
     
     if request.method == 'POST':
         f = ConfirmForm(request.POST)
         if f.is_valid():
             reason = f.cleaned_data.get('reason')
         booking.delete()
-        send_email.delay("Booking Rejected", reason ,[preclaim.notification_email])
-        return render(request,'attendance/dissapproved.html',{'reason':reason,'preclaim':preclaim})
+        send_email.delay("Booking for {} Rejected".format(booking.title), "Reason: {}".format(reason), 'venue@mail.manipalconnect.com', [booking.notification_email])
+        return render(request,'venue/dissapproved.html',{'reason':reason,'booking':booking})
 
 def download_calanders(request):
     batches = Batch.objects.filter(active=True)
