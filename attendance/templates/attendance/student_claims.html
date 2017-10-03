@@ -9,8 +9,6 @@
         </div>
         <form action="" style="display:None">
             {% csrf_token %}
-            {{periodform.department}}
-            {{periodform.batch}}
             {{studentform.event}}
         </form>
 
@@ -24,10 +22,10 @@
           <input id="email_email" type="email"/>
           <div id="email_validation" class="validation"></div>
         </div>
-        <div id="number">
+        <div id="rollnumber">
           <div class="tooltip">What's your roll number?</div>
-          <input id="number_number" type="number"/>
-          <div id="number_validation" class="validation"></div>
+          <input id="rollnumber_number" type="number"/>
+          <div id="rollnumber_validation" class="validation"></div>
         </div>
         <div id="serialNumber">
           <div class="tooltip">What's your Serial number?</div>
@@ -35,22 +33,8 @@
           <div id="serialNumber_validation" class="validation"></div>
         </div>
         <div id="year">
-          <div class="tooltip">Which year are you studying in?</div>
-          <div id="year_years" class="radio">
-            <div class="selected">1<sup>st</sup></div>
-            <div>2<sup>nd</sup></div>
-            <div>3<sup>rd</sup></div>
-            <div>4<sup>th</sup></div>
-            <input id="year_years_selection" type="hidden"/>
-          </div>
-        </div>
-        <div id="batch">
-          <div class="tooltip">Which batch are you in?</div>
-          <div id="batch_batches" class="radio">
-            <div class="selected">A</div>
-            <div>B</div>
-            <input id="batch_batches_selection" type="hidden"/>
-          </div>
+          <div class="tooltip">Which year and batch are you in?</div>
+          <input id="year_value" type="hidden"/>
         </div>
         <div id="classes">
           <div class="tooltip">Select the classes you've missed.</div>
@@ -75,7 +59,7 @@
               <tbody id="classes_calendar_dates"></tbody>
             </table>
           </div>
-          <div id="classes_datedList"></div>
+          <div id="classes_datedList"><div class="tooltip" style="text-align:center;">Select the Batch and Date to Load Classes Then.</div></div>
           <div id="classes_otherClasses" class="noshow">
             <div>
               <h2>Other</h2>
@@ -86,28 +70,7 @@
                 <input type="time" id="classes_otherClasses_startTime"/> to <input type="time" id="classes_otherClasses_endTime"/>
               </div>
               <div>
-                <select id="classes_otherClasses_depts">
-                  <option>Select the department</option>
-                  <option>Anatomy</option>
-                  <option>Physiology</option>
-                  <option>Biochemistry</option>
-                  <option>Community Medicine</option>
-                  <option>Pathology</option>
-                  <option>Pharmacology</option>
-                  <option>Microbiology</option>
-                  <option>Forensic Medicine</option>
-                  <option>Medicine</option>
-                  <option>ENT</option>
-                  <option>OBG</option>
-                  <option>Opthalmology</option>
-                  <option>Surgery</option>
-                  <option>Paediatrics</option>
-                  <option>Pulmonary Medicine</option>
-                  <option>Orthopaedics</option>
-                  <option>Dental</option>
-                  <option>Dermatology</option>
-                  <option>Neurology</option>
-                </select>
+                <input id="classes_otherClasses_depts" type="hidden"/>
               </div>
               <div id="classes_otherClasses_validation" class="validation"></div>
             </div>
@@ -123,8 +86,7 @@
         </div>
         <div id="events">
           <div class="tooltip">Which event did you miss these classes for?</div>
-          <input id="events_text" type="text"/>
-          <div id="events_validation" class="validation"></div>
+          <input type="hidden" id="events_value"/>
         </div>
         <div id="thankyou">
           <div>
@@ -137,5 +99,33 @@
         </div>
       </div>
 
-
+      <script>
+const departments = (function () {
+  var depts = `{{periodform.department}}`;
+  depts = depts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>(\w+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
+  var obj = {};
+  for (var i = 0; i < depts.length; i += 2) {
+    obj[depts[i]] = depts[i+1];
+  }
+  return obj;
+})();
+const batches = (function () {
+  var bts = `{{periodform.batch}}`;
+  bts = bts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>([\w\d]+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
+  var obj = {};
+  for (var i = 0; i < bts.length; i += 2) {
+    obj[bts[i]] = bts[i+1];
+  }
+  return obj;
+})();
+const events = (function () {
+  var evts = `{{studentform.event}}`;
+  evts = evts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>([\w\d]+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
+  var obj = {};
+  for (var i = 0; i < evts.length; i += 2) {
+    obj[evts[i]] = evts[i+1];
+  }
+  return obj;
+})();
+      </script>
 {% endblock body %}
