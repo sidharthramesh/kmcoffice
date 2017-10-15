@@ -1,0 +1,144 @@
+{% extends "attendance/base.html" %}
+{% load static %}
+{% block body %}
+
+<div id="viewport">
+        <div class="show">
+          <h1>Attendance Claims</h1>
+          <p>Fill out the form below to claim attendance for events you've had to cover.</p>
+        </div>
+        <form action="" style="display:None">
+            {% csrf_token %}
+            {{periodform.department}}
+            {{periodform.batch}}
+            {{studentform.event}}
+          </form>
+        
+        <div id="name" class="show">
+          <div class="tooltip">What's your name?</div>
+          <input id="name_text" type="text"/>
+          <div id="name_validation" class="validation"></div>
+        </div>
+        <div id="email">
+          <div class="tooltip">Enter your email address.</div>
+          <input id="email_email" type="email"/>
+          <div id="email_validation" class="validation"></div>
+        </div>
+        <div id="number">
+          <div class="tooltip">What's your roll number?</div>
+          <input id="number_number" type="number"/>
+          <div id="number_validation" class="validation"></div>
+        </div>
+        <div id="serialNumber">
+          <div class="tooltip">What's your Serial number?</div>
+          <input id="serialNumber_number" type="number"/>
+          <div id="serialNumber_validation" class="validation"></div>
+        </div>
+        <div id="year">
+          <div class="tooltip">Which year are you studying in?</div>
+          <div id="year_years" class="radio">
+            <div class="selected">1<sup>st</sup></div>
+            <div>2<sup>nd</sup></div>
+            <div>3<sup>rd</sup></div>
+            <div>4<sup>th</sup></div>
+            <input id="year_years_selection" type="hidden"/>
+          </div>
+        </div>
+        <div id="batch">
+          <div class="tooltip">Which batch are you in?</div>
+          <div id="batch_batches" class="radio">
+            <div class="selected">A</div>
+            <div>B</div>
+            <input id="batch_batches_selection" type="hidden"/>
+          </div>
+        </div>
+        <div id="classes">
+          <div class="tooltip">Select the classes you've missed.</div>
+          <div id="classes_calendar">
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="1" id="classes_calendar_prev" style="cursor:pointer;"><</th>
+                  <th colspan="5" id="classes_calendar_month">MONTH</th>
+                  <th colspan="1" id="classes_calendar_next" style="cursor:pointer;">></th>
+                </tr>
+                <tr>
+                  <th>Mon</th>
+                  <th>Tue</th>
+                  <th>Wed</th>
+                  <th>Thu</th>
+                  <th>Fri</th>
+                  <th>Sat</th>
+                  <th>Sun</th>
+                </tr>
+              </thead>
+              <tbody id="classes_calendar_dates"></tbody>
+            </table>
+          </div>
+          <div id="classes_datedList"></div>
+          <div id="classes_otherClasses" class="noshow">
+            <div>
+              <h2>Other</h2>
+              <div><span id="classes_otherClasses_date"></span></div>
+              <div class="tooltip">What's the class?</div>
+              <input type="text" id="classes_otherClasses_name"/>
+              <div id="classes_otherClasses_time">
+                <input type="time" id="classes_otherClasses_startTime"/> to <input type="time" id="classes_otherClasses_endTime"/>
+              </div>
+              <div>
+                <select id="classes_otherClasses_depts">
+                  <option>Select the department</option>
+                  <option>Anatomy</option>
+                  <option>Physiology</option>
+                  <option>Biochemistry</option>
+                  <option>Community Medicine</option>
+                  <option>Pathology</option>
+                  <option>Pharmacology</option>
+                  <option>Microbiology</option>
+                  <option>Forensic Medicine</option>
+                  <option>Medicine</option>
+                  <option>ENT</option>
+                  <option>OBG</option>
+                  <option>Opthalmology</option>
+                  <option>Surgery</option>
+                  <option>Paediatrics</option>
+                  <option>Pulmonary Medicine</option>
+                  <option>Orthopaedics</option>
+                  <option>Dental</option>
+                  <option>Dermatology</option>
+                  <option>Neurology</option>
+                </select>
+              </div>
+              <div id="classes_otherClasses_validation" class="validation"></div>
+            </div>
+            <div>
+              <img id="classes_otherClasses_submit" src="{%static 'checkbox-unchecked.png' %}"/>
+            </div>
+          </div>
+          <div id="classes_selection">
+            <div class="tooltip">Selected Classes</div>
+            <div id="classes_selection_selection"></div>
+          </div>
+          <div id="classes_validation" class="validation"></div>
+        </div>
+        <div id="events">
+          <div class="tooltip">Which event did you miss these classes for?</div>
+          <input id="events_text" type="text"/>
+          <div id="events_validation" class="validation"></div>
+        </div>
+        <div id="thankyou">
+          <div>
+            You will receive an email confirming that we have received your claims. You can recheck what you have sent.<br> Peace ✌
+            <span id="download" style="display: none;">If you want to download this as an Excel file, click <a id="download_link" href="">here</a></span>
+          </div>
+        </div>
+        <div id="buttonTray" class="show">
+          <div id="buttonTray_next">Next</div>
+        </div>
+      </div>
+      
+
+{% endblock body %}
+    
+
+
