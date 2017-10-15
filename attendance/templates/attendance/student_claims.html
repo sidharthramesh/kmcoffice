@@ -80,31 +80,31 @@
 
       <script>
 const departments = (function () {
-  var depts = `{{periodform.department}}`;
-  depts = depts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>(\w+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
-  var obj = {};
-  for (var i = 0; i < depts.length; i += 2) {
-    obj[depts[i]] = depts[i+1];
-  }
-  return obj;
+  var depts = {};
+  var ele = document.createElement('div');
+  ele.innerHTML = `{{periodform.department}}`;
+  ele.querySelectorAll('option').forEach(function (el) {
+    depts[el.getAttribute('value')] = el.innerHTML;
+  });
+  return depts;
 })();
 const batches = (function () {
-  var bts = `{{periodform.batch}}`;
-  bts = bts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>([\w\d]+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
-  var obj = {};
-  for (var i = 0; i < bts.length; i += 2) {
-    obj[bts[i]] = bts[i+1];
-  }
-  return obj;
+  var bts = {};
+  var ele = document.createElement('div');
+  ele.innerHTML = `{{periodform.batch}}`;
+  ele.querySelectorAll('option').forEach(function (el) {
+    bts[el.getAttribute('value')] = el.innerHTML;
+  });
+  return bts;
 })();
 const events = (function () {
-  var evts = `{{studentform.event}}`;
-  evts = evts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>([\w\d]+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
-  var obj = {};
-  for (var i = 0; i < evts.length; i += 2) {
-    obj[evts[i]] = evts[i+1];
-  }
-  return obj;
+  var evts = {};
+  var ele = document.createElement('div');
+  ele.innerHTML = `{{studentform.event}}`;
+  ele.querySelectorAll('option').forEach(function (el) {
+    evts[el.getAttribute('value')] = el.innerHTML;
+  });
+  return evts;
 })();
       </script>
 {% endblock body %}
