@@ -53,7 +53,7 @@ def approve_booking(request, pk):
         booking.status='3'
         booking.save()
         # create google calander event
-        insert_event(
+        insert_event.delay(
             booking.title,
             booking.venue.name,
             booking.description,
