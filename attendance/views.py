@@ -142,13 +142,13 @@ def forward_claim(request, pk):
     approve_link = reverse('approve_preclaim',kwargs={'pk':pk})
     approve_link = add_auth_token(approve_link,login_token)
     #print(approve_link)
-    disapprove_link = reverse('disapprove_preclaim',kwargs={'pk':instance.pk})
+    disapprove_link = reverse('disapprove_preclaim',kwargs={'pk':pk})
     disapprove_link = add_auth_token(disapprove_link,login_token)
     #print(disapprove_link)
     url = 'http://kmcoffice.herokuapp.com'
     approve_link = url+approve_link
     disapprove_link = url+disapprove_link
-    body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':instance})
+    body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':preclaim})
     #print(body)
     send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
     return render(request,'attendance/approved.html',{'preclaim':preclaim})
