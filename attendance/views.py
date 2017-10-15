@@ -54,6 +54,7 @@ def process_claims(request):
         #print("Student Form valid")
         student_data = student_form.cleaned_data
         student,_ = Student.objects.get_or_create(roll_no=student_data['roll_no'])
+        student.name = student_data.get('name')
         student.email = student_data.get('email')
         student.serial = student_data.get('serial')
         #print(student)
@@ -137,7 +138,7 @@ def forward_claim(request, pk):
     preclaim = PreClaim.objects.get(pk=int(pk))
     user = User.objects.get(username='dean')
     login_token = utils.get_parameters(user)
-    approve_link = reverse('approve_preclaim',kwargs={'pk':instance.pk})
+    approve_link = reverse('approve_preclaim',kwargs={'pk':pk})
     approve_link = add_auth_token(approve_link,login_token)
     #print(approve_link)
     disapprove_link = reverse('disapprove_preclaim',kwargs={'pk':instance.pk})
