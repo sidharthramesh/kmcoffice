@@ -36,14 +36,6 @@ select
 {
   background:#d6d8d7;
 }
-#classes_otherClasses_timetravel_line_inner
-{
-  background:#d6d8d7;
-}
-#classes_otherClasses_timetravel_line_inner_inner
-{
-  background:rgba(0,0,0,0.48);
-}
 .validation
 {
   color:red;
@@ -153,26 +145,17 @@ body
 }
 #buttonTray
 {
-  width:calc(100% - 32px);
+  width:100%;
   font-size:0px;
   display:table !important;
 }
-#buttonTray > div
+#buttonTray > button
 {
-  width:calc(100% - 16px);
-  height:32px;
+  width:100%;
   padding:8px;
   font-size:16px;
   text-align: center;
   display:table-cell;
-}
-#buttonTray > div:hover
-{
-  background:rgba(0,0,0,0.16);
-}
-#buttonTray > div:hover
-{
-  background:rgba(0,0,0,0.32);
 }
 
 #year_years,
@@ -235,15 +218,14 @@ body
   display:table;
 }
 #classes_datedList > div > div,
-#classes_selection_selection > div > div,
-#classes_otherClasses > div
+#classes_selection_selection > div > div
 {
   display:table-cell;
   padding:8px;
 }
 #classes_datedList > div > div:nth-child(1) > h2,
 #classes_selection_selection > div > div:nth-child(1) > h2,
-#classes_otherClasses > div:nth-child(1) > h2
+#classes_otherClasses h3
 {
   margin:0px;
   font-weight:normal;
@@ -274,8 +256,7 @@ body
   padding:8px;
 }
 #classes_datedList > div > div:nth-child(1) > div > select,
-#classes_selection_selection > div > div:nth-child(1) > div > select,
-#classes_otherClasses > div:nth-child(1) > div > select
+#classes_selection_selection > div > div:nth-child(1) > div > select
 {
   padding:8px;
   display:block;
@@ -283,15 +264,13 @@ body
   outline:none;
 }
 #classes_datedList > div > div:nth-child(2),
-#classes_selection_selection > div > div:nth-child(2),
-#classes_otherClasses > div:nth-child(2)
+#classes_selection_selection > div > div:nth-child(2)
 {
   width:32px;
   vertical-align:top;
 }
 #classes_datedList > div > div:nth-child(2) > img,
-#classes_selection_selection > div > div:nth-child(2) > img,
-#classes_otherClasses > div:nth-child(2) > img
+#classes_selection_selection > div > div:nth-child(2) > img
 {
   cursor:pointer;
   width:32px;
@@ -305,32 +284,6 @@ body
   margin-top: 0px;
   padding: 8px;
   padding-top:0px;
-  display:table;
-}
-#classes_otherClasses
-{
-  cursor:pointer;
-}
-#classes_otherClasses input[type=text]
-{
-  margin-bottom:8px !important;
-}
-#classes_otherClasses > div:nth-child(1) > div
-{
-  margin-bottom:8px;
-}
-#classes_otherClasses.noshow > div:nth-child(1) *,
-#classes_otherClasses.noshow > div:nth-child(2)
-{
-  display: none;
-}
-#classes_otherClasses.noshow > div:nth-child(1) > h2
-{
-  display:inline !important;
-}
-#classes_otherClasses img
-{
-  margin-top:8px;
 }
 #claims > .first
 {
@@ -402,6 +355,14 @@ body
   width:24px;
   height:24px;
   margin-bottom:4px;
+}
+
+#events_stand
+{
+  width:100%;
+  padding:8px;
+  background:white;
+  border:none;
 }
 
 #buttonTray > div

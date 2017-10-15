@@ -1,520 +1,300 @@
-// var moment = require('moment');
-var viewport = document.getElementById('viewport');
-var buttonTray = document.getElementById('buttonTray');
+let eventActivator = false;
 
-function setCalTo (mm, yyyy) {
-  var currMonthDeeds = getMonthDetails(mm, yyyy);
-  document.getElementById('classes_calendar_month').innerHTML = currMonthDeeds[0];
-  var dates = document.getElementById('classes_calendar_dates');
-  dates.innerHTML = "";
-  var doc = document;
-  var date_length = currMonthDeeds[1] + currMonthDeeds[2];
-  if (currMonthDeeds[2] === 0) {
-    currMonthDeeds[2] = 7;
+// Batches
+var Batches = (function () {
+  var callback = function (batch) {
+    Classes.renderListing();
+  }; // CALLBACK FOR CLICKS
+  var batchstand = document.getElementById('batch_batches');
+  batchstand.innerHTML = Object.keys(batches).map(function (value) {
+    return '<div data-value="' + value + '">' + batches[value] + '</div>';
+  }).join('');
+  var currSelection = batchstand.querySelector('div[data-value]');
+  currSelection.className = "selected";
+  if (eventActivator) {
+    callback(currSelection.getAttribute('data-value'));
   }
-  var tr = doc.createElement('tr');
-  var flag = true;
-  for (var i = 1; i < date_length; i++) {
-    var td = doc.createElement('td');
-    if ((i - currMonthDeeds[2] + 1) > 0) {
-      td.innerHTML = (i - currMonthDeeds[2] + 1);
-      var inp = doc.createElement('input');
-      inp.type = "hidden";
-      var dd__ = (i - currMonthDeeds[2] + 1);
-      if (dd__ < 10) {
-        dd__ = "0" + dd__;
+  batchstand.querySelectorAll('div[data-value]').forEach(function (ele) {
+    ele.addEventListener('click', function () {
+      if (currSelection) {
+        currSelection.className = "";
       }
-      else {
-        dd__ = "" + dd__;
+      currSelection = this;
+      currSelection.className = "selected";
+      if (eventActivator) {
+        callback(currSelection.getAttribute('data-value'));
       }
-      inp.value = currMonthDeeds[3] + "-" + currMonthDeeds[4] + "-" + dd__;
-      td.appendChild(inp);
-      td.addEventListener('click', function () {
-        if (this.className !== "selected") {
-          selectDate(this);
-        }
-      }, false);
-      if (flag) {
-        selectDate(td);
-        flag = false;
-      }
-    }
-    else {
-      td.innerHTML = "--";
-    }
-    tr.appendChild(td);
-    if (i % 7 === 0) {
-      dates.appendChild(tr);
-      tr = doc.createElement('tr');
-    }
+    }, false);
+  });
+  return function () {
+    return currSelection.getAttribute('data-value');
   }
-  dates.appendChild(tr);
-};
-function getMonthDetails (month, year) {
-  var details = [];
-  var m = 0;
-  switch (month) {
-    case 0:
-      details = ["January, " + year, 31];
-      m = 11;
-      break;
-    case 1:
-      if (year % 4 === 0) {
-        details = ["Febuary, " + year, 29];
-      }
-      else {
-        details = ["Febuary, " + year, 28];
-      }
-      m = 12;
-      break;
-    case 2:
-      details = ["March, " + year, 31];
-      m = 1;
-      break;
-    case 3:
-      details = ["April, " + year, 30];
-      m = 2;
-      break;
-    case 4:
-      details = ["May, " + year, 31];
-      m = 3;
-      break;
-    case 5:
-      details = ["June, " + year, 30];
-      m = 4;
-      break;
-    case 6:
-      details = ["July, " + year, 31];
-      m = 5;
-      break;
-    case 7:
-      details = ["August, " + year, 31];
-      m = 6;
-      break;
-    case 8:
-      details = ["September, " + year, 30];
-      m = 7;
-      break;
-    case 9:
-      details = ["October, " + year, 31];
-      m = 8;
-      break;
-    case 10:
-      details = ["November, " + year, 30];
-      m = 9;
-      break;
-    case 11:
-      details = ["Decemeber, " + year, 31];
-      m = 10;
-      break;
-  }
-  var _year = "" + year;
-  _year.split('');
-  var _D = parseInt(_year[2] + _year[3]);
-  var _C = parseInt(_year[0] + _year[1]);
-  day = 1 + Math.floor(((13 * m) - 1) / 5) + _D + Math.floor(_D / 4) + Math.floor(_C / 4) - 2 * _C;
-  if (day < 0) {
-    day = (day % 7) + 7;
-  }
-  else {
-    day = day % 7;
-  }
-  details.push(day);
-  details.push(year);
-  var month_ =  month + 1;
-  if (month_ < 10) {
-    month_ = "0" + month_;
-  }
-  else {
-    month_ += "";
-  }
-  details.push(month_);
-  return details;
-};
-function selectDate (obj) {
-  if (currSelection !== undefined) {
-    currSelection.className = "";
-  }
-  obj.className = "selected";
-  currSelection = obj;
-  updateClasses(obj.querySelector("input[type=hidden]").value, document.getElementById('year_years_selection').value, document.getElementById('batch_batches_selection').value);
-};
-function updateClasses (date, year, batch) {
-  console.log(date, year, batch);
-  var xmlhttp;
-  if (window.XMLHttpRequest) {
-    xhttp = new XMLHttpRequest();
-  } else {
-    // code for older browsers
-    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var dayClasses = JSON.parse(this.responseText);
-      dayClasses = dayClasses.classes;
-      // console.log(dayClasses);
-      var dayClasses_length = dayClasses.length;
-      var doc = document;
-      var container = document.getElementById('classes_datedList');
-      container.innerHTML = "";
-      for (var i = 0; i < dayClasses_length; i++) {
-        var ele = doc.createElement('div');
-        var txt = '<div><h2>CLASS_NAME</h2><p>START_TIME - END_TIME</p><span>DATE</span><div>DEPT</div><div class="validation"></div></div><div><img src="/static/checkbox-unchecked.png"/><input type="hidden"/></div>';
-        txt = txt.replace('CLASS_NAME', dayClasses[i].name);
-        txt = txt.replace('START_TIME', moment(dayClasses[i].start).format('LT'));
-        txt = txt.replace('END_TIME', moment(dayClasses[i].end).format('LT'));
-        txt = txt.replace('DATE', moment(dayClasses[i].date).format('ll'));
-        console.log(txt)
-        if (dayClasses[i].department instanceof Array) {
-          var dpt_txt = "<select><option>Select the department</option><option>" + dayClasses[i].department.join("</option><option>") + "</option></select>";
-          txt = txt.replace('DEPT', dpt_txt);
-        }
-        else {
-          txt = txt.replace('DEPT', '');
-        }
-        ele.innerHTML = txt;
-        ele.querySelector('input[type=hidden]').value = JSON.stringify(dayClasses[i]);
-        ele.querySelector('div:nth-child(2)').addEventListener('click', function () {
-          if (this.parentNode.parentNode.id === "classes_datedList") {
-              if (this.parentNode.querySelector("select")) {
-              if (this.parentNode.querySelector("select").value !== "Select the department") {
-                var dayClass = JSON.parse(this.parentNode.querySelector('input[type=hidden]').value);
-                if (dayClass.department.indexOf(this.parentNode.querySelector("select").value) > -1) {
-                  this.parentNode.querySelector('.validation').innerHTML = "";
-                  addToSelectedClasses(this.parentNode);
-                }
-              }
-              else {
-                // FORM VALIDATION
-                this.parentNode.querySelector('.validation').innerHTML = "Please select the department.";
-              }
-            }
-            else {
-              addToSelectedClasses(this.parentNode);
-            }
+})();
+
+// Calendar
+var Calendar = (function () {
+  var Cal = function () {
+    this.month = document.getElementById('classes_calendar_month');
+    this.nextMonth = document.getElementById('classes_calendar_next');
+    this.body = document.getElementById('classes_calendar_dates');
+    this.callback = function (date) {
+      Classes.renderListing();
+    }; // CALLBACKS FOR CLICKS
+
+    this.curr = {
+      moment: moment(),
+      ele: {}
+    };
+
+    document.getElementById('classes_calendar_prev').addEventListener('click', function () {
+      this.curr.moment = this.curr.moment.month(this.curr.moment.month() - 1);
+      this.curr.moment = this.curr.moment.date(1);
+      this.setToCurr();
+    }.bind(this), false);
+    document.getElementById('classes_calendar_next').addEventListener('click', function () {
+      this.curr.moment = this.curr.moment.month(this.curr.moment.month() + 1);
+      this.curr.moment = this.curr.moment.date(1);
+      this.setToCurr();
+    }.bind(this), false);
+
+    this.setToCurr();
+
+    return this;
+  };
+  Cal.prototype = {
+    setToCurr: function () {
+      this.setToMonthAndYear(this.curr.moment.month(), this.curr.moment.year());
+      this.selectDate(this.curr.moment.format("YYYY-MM-DD"));
+    },
+    setToMonthAndYear: function (month, year) {
+      var data = CalendarJs.of(year, month);
+      this.month.innerHTML = data.month + " " + data.year;
+      var data_cal = data.calendar;
+      this.body.innerHTML = data_cal.map(function (row) {
+        return "<tr>" + row.map(function (cell) {
+          if (cell > 0) {
+            return '<td data-value="' + year + '-' + ((month + 1) < 10 ? "0" + (month + 1) : (month + 1)) +  '-' + (cell < 10 ? "0" + cell : cell) + '">' + cell + '</td>';
           }
-        }, false);
-        var selectedClasses = document.getElementById('classes_selection_selection').childNodes;
-        var selectedClasses_length = selectedClasses.length;
-        var id = dayClasses[i].id;
-        var date = dayClasses[i].date;
-        for (var j = 0; j < selectedClasses_length; j++) {
-          var selectedClass = JSON.parse(selectedClasses[j].querySelector('input[type=hidden]').value);
-          if (selectedClass.id === id && selectedClass.date === date) {
-            ele.style.display = "none";
+          else {
+            return "<td></td>";
           }
-        }
-        container.appendChild(ele);
+        }).join('') + "</tr>";
+      }).join('');
+      var parent = this;
+      this.body.querySelectorAll('td[data-value]').forEach(function (ele) {
+        ele.addEventListener('click', function (e) {
+          this.curr.moment.date(parseInt(e.target.getAttribute('data-value').split('-')[2]));
+          this.selectDate(e.target.getAttribute('data-value'));
+        }.bind(parent), false);
+      });
+    },
+    selectDate: function (date) {
+      if (this.curr.ele) {
+        this.curr.ele.className = "";
+      }
+      this.curr.ele = this.body.querySelector('td[data-value="' + date + '"]');
+      this.curr.ele.className = "selected";
+      if (eventActivator) {
+        this.callback(date);
       }
     }
   };
-  xhttp.open("GET", "/attendance/class_data?date=" + date + "&batch=1", true);
-  xhttp.send();
-  document.getElementById('classes_otherClasses').className = "noshow";
-  document.getElementById('classes_otherClasses_date').innerHTML = date;
-  document.getElementById('classes_otherClasses_name').value = "";
-  document.getElementById('classes_otherClasses_startTime').value = "";
-  document.getElementById('classes_otherClasses_endTime').value = "";
-  document.getElementById('classes_otherClasses_depts').value = "Select the department";
-  document.getElementById('classes_otherClasses_validation').innerHTML = "";
-}
-function addToSelectedClasses (node) {
-  var node_ = node.cloneNode(true);
-  if (node.querySelector("select")) {
-    var sel = node_.querySelector("select");
-    sel.value = node.querySelector("select").value;
-    sel.parentNode.innerHTML = "<div>" + sel.value + "</div>";
-    var selectedClass_ = JSON.parse(node_.querySelector('input[type=hidden]').value);
-    selectedClass_.department =  node.querySelector("select").value;
-    node_.querySelector('input[type=hidden]').value = JSON.stringify(selectedClass_);
-  }
-  node_.querySelector('div:nth-child(2) > img').addEventListener('click', function () {
-    var searchEles = document.getElementById('classes_datedList').childNodes;
-    var searchEles_length = searchEles.length;
-    var this_ = JSON.parse(this.parentNode.querySelector('input[type=hidden]').value);
-    for (var i = 0; i < searchEles_length; i++) {
-      searchEle = JSON.parse(searchEles[i].querySelector('input[type=hidden]').value);
-      if (searchEle.id === this_.id && searchEle.date === this_.date) {
-        searchEles[i].style.display = "table";
+  var calen = new Cal();
+  return function () {
+    return calen.curr.moment;
+  };
+})();
+
+// Class Listing
+var Classes = (function () {
+  // vars
+  var ele = document.getElementById('classes_datedList');
+  var currentClasses = [];
+  var currBatch = "";
+  var currDate = "";
+  function renderDept () {
+    return `<select>` + Object.keys(departments).map(function (key) {
+      return `<option value="` + key + `">` + departments[key] + `</option>`;
+    }).join('') + `</select>`;
+  };
+  function renderListing () {
+    // get date
+    var date = Calendar();
+    date = date.format("YYYY-M-D");
+    // get batches
+    var batch = Batches();
+    // show loading
+    ele.innerHTML = `<div class="tooltip" style="text-align:center;">Loading...</div>`;
+    // check if to use cache or not
+    if (date === currDate && batch === currBatch) {
+      console.log("FROM CACHE");
+      setCurrentClasses(currentClasses);
+    }
+    else {
+      // get request
+      var xmlhttp;
+      if (window.XMLHttpRequest) {
+        xhttp = new XMLHttpRequest();
+      } else {
+        xhttp = new ActiveXObject("Microsoft.XMLHTTP");
       }
-    }
-    this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
-  }, false);
-  node_.querySelector('div:nth-child(2) > img').src = "/static/checkbox-checked.png";
-  document.getElementById('classes_selection_selection').appendChild(node_);
-  node.style.display = "none";
-};
-function harvest () {
-  var details = {};
-  details.name = "" + document.getElementById('name_text').value;
-  details.email = "" + document.getElementById('email_email').value;
-  details.rollNumber = "" + document.getElementById('number_number').value;
-  details.serialNumber = "" + document.getElementById('serialNumber_number').value;
-  details.year = "" + document.getElementById('year_years_selection').value;
-  details.batch = "" + document.getElementById('batch_batches_selection').value;
-  var selected = [];
-  var selectedEles = document.getElementById('classes_selection_selection').childNodes;
-  var selectedEles_length = selectedEles.length;
-  for (var i = 0; i < selectedEles_length; i++) {
-    selected.push(JSON.parse(selectedEles[i].querySelector('input[type=hidden]').value));
-  }
-  details.selectedClasses = selected;
-  details.event = "" + document.getElementById('events_text').value;
-  // validation
-  document.getElementById('name_validation').innerHTML = "";
-  document.getElementById('email_validation').innerHTML = "";
-  document.getElementById('number_validation').innerHTML = "";
-  document.getElementById('serialNumber_validation').innerHTML = "";
-  document.getElementById('classes_validation').innerHTML = ""
-  document.getElementById('events_validation').innerHTML = "";
-  var flag = true;
-  var scroller = true;
-  if (!(/^\w[\w\s!]*/.test(details.name))) {
-    flag = false;
-    document.getElementById('name_validation').innerHTML = "Invalid Name.";
-    if (scroller) {
-      document.getElementById('name').scrollIntoView(true);
-      scroller = false;
-    }
-  }
-  if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(details.email))) {
-    flag = false;
-    document.getElementById('email_validation').innerHTML = "Invalid Email.";
-    if (scroller) {
-      document.getElementById('email').scrollIntoView(true);
-      scroller = false;
-    }
-  }
-  if (!(/^\d{9,}/.test(details.rollNumber))) {
-    flag = false;
-    document.getElementById('number_validation').innerHTML = "Invalid Roll Number.";
-    if (scroller) {
-      document.getElementById('number').scrollIntoView(true);
-      scroller = false;
-    }
-  }
-  if (!(/^\d+/.test(details.serialNumber))) {
-    flag = false;
-    document.getElementById('serialNumber_validation').innerHTML = "Invalid Serial Number.";
-    if (scroller) {
-      document.getElementById('serialNumber').scrollIntoView(true);
-      scroller = false;
-    }
-  }
-  if (details.selectedClasses.length === 0) {
-    flag = false;
-    document.getElementById('classes_validation').innerHTML = "Please select the classes you have missed.";
-    if (scroller) {
-      document.getElementById('classes_selection').scrollIntoView(true);
-      scroller = false;
-    }
-  }
-  if (!(/^\w[\w\s]*/.test(details.event))) {
-    flag = false;
-    document.getElementById('events_validation').innerHTML = "Invalid Event Name.";
-    if (scroller) {
-      document.getElementById('events').scrollIntoView(true);
-      scroller = false;
-    }
-  }
-  if (flag === true) {
-    return details;
-  }
-  else {
-    return false;
-  }
-};
-function sendReq () {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("POST", '/attendance/class_data');
-  xmlhttp.setRequestHeader("Content-Type", "application/json");
-  xmlhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var lst = JSON.parse(this.responseText);
-      document.getElementById('download_link').href = "/download?ids=" + lst.join(',');
-      document.getElementById('download').style.display = "inline";
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // respond to get
+          var classList = JSON.parse(this.responseText);
+          currentClasses = classList.classes;
+          setCurrentClasses(classList);
+        }
+        else if (this.readyState == 4 && this.stats != 200) {
+          ele.innerHTML = `<div class="tooltip" style="text-align:center;">An Error Occured...</div>`;
+        }
+      };
+      xhttp.open("GET", "/attendance/class_data?date=" + date + "&batch=" + batch, true);
+      xhttp.send();
+      currDate = date;
+      currBatch = batch;
     }
   };
-  if (harvest()) {
-    xmlhttp.send(JSON.stringify(harvest()));
-    return true;
-  }
-  else {
-    return false;
-  }
-};
+  function createClassCard (class_, index) {
+    var el = document.createElement('div');
+    el.innerHTML = `<div><h2>CLASS_NAME</h2><p>START_TIME - END_TIME</p><span>DATE</span><div>DEPT</div><div class="validation"></div></div><div class="click"><img src="/static/checkbox-unchecked.png"/><input type="hidden"/></div>`
+      .replace('CLASS_NAME', class_.name)
+      .replace('START_TIME', moment(class_.start).format('h:mm a'))
+      .replace('END_TIME', moment(class_.end).format('h:mm a'))
+      .replace('DATE', moment(class_.start).format('dddd, Do MMMM'))
+      .replace('DEPT', (class_.department !== null ? departments[class_.department] : renderDept()));
+    el.setAttribute('data-index', index);
+    el.querySelector('.click').addEventListener('click', function () {
+      var i = parseInt(this.parentNode.getAttribute('data-index'));
+      Selected.addToList(i, currentClasses[i].department === null ? this.parentNode.querySelector('select').value : null);
+      this.parentNode.parentNode.removeChild(this.parentNode);
+    }, false);
+    return el;
+  };
+  function setCurrentClasses () {
+    ele.innerHTML = "";
+    if (currentClasses.length > 0) {
+      for (var i = 0; i < currentClasses.length; i++) {
+        // remove all selected classes from here
+        if (Selected.indexOf(currentClasses[i]) === -1) {
+          ele.appendChild(createClassCard(currentClasses[i], i));
+        }
+      }
+    }
+    else {
+      ele.innerHTML = `<div class="tooltip" style="text-align:center;">There Are No Classes On This Day...</div>`;
+    }
+  };
+  return {
+    renderListing: renderListing,
+    getCurrentClass: function (index) {
+      return JSON.parse(JSON.stringify(currentClasses[index]));
+    }
+  };
+})();
 
-document.getElementById('classes_calendar_prev').addEventListener('click', function () {
-  mm--;
-  if (mm < 0) {
-    mm = 11;
-    yyyy--;
-  }
-  setCalTo(mm, yyyy);
-}, false);
-document.getElementById('classes_calendar_next').addEventListener('click', function () {
-  mm++;
-  if (mm >= 11) {
-    mm = 0;
-    yyyy++;
-  }
-  setCalTo(mm, yyyy);
-}, false);
-document.getElementById('buttonTray_next').addEventListener('click', function () {
-  /*var pages = [
-    'name',
-    'email',
-    'number',
-    'serialNumber',
-    'year',
-    'batch',
-    'classes',
-    'events'
-  ];
-  var pages_length = pages.length;
-  for (var i = 0; i < pages_length; i++) {
-    var ele = document.getElementById('' + pages[i]);
-    // validation
-    if (ele.className !== 'show') {
-      ele.className = 'show';
-      return false;
-    }
-  }*/
-  if (sendReq() !== false) {
-    document.getElementById('buttonTray').parentNode.removeChild(document.getElementById('buttonTray'));
-    document.getElementById('thankyou').className = "show";
-  }
-}, false);
-document.getElementById('classes_otherClasses').addEventListener('click', function () {
-  if (this.className === 'noshow') {
-    this.className = "";
-  }
-}, false);
-document.getElementById('classes_otherClasses_submit').addEventListener('click', function () {
-  // collect
-  var name = document.getElementById('classes_otherClasses_name').value;
-  var startTime = document.getElementById('classes_otherClasses_startTime').value;
-  var endTime = document.getElementById('classes_otherClasses_endTime').value;
-  var dept = document.getElementById('classes_otherClasses_depts').value;
-  var date = document.getElementById('classes_otherClasses_date').textContent;
-  // validate
-  var flag = true;
-  if (!(/^\w[\s\w\/]*$/.test(name))) {
-    flag = false;
-    document.getElementById('classes_otherClasses_validation').innerHTML = "Please check the name of the class.";
-  }
-  if (!(/^\d\d\:\d\d$/.test(startTime))) {
-    flag = false;
-    document.getElementById('classes_otherClasses_validation').innerHTML = "Please check the start time.";
-  }
-  else {
-    var matches = /^(\d\d)\:(\d\d)$/.exec(startTime);
-    var hours = Number(matches[1]);
-    var minutes = Number(matches[2]);
-    var meridian = "";
-    if (hours > 12) {
-      meridian = "PM";
-      hours -= 12;
-    }
-    else {
-      meridian = "AM";
-    }
-    if (hours == 0) {
-      hours = 12;
-    }
-    if (hours < 10) {
-      hours = "0" + hours;
-    }
-    if (minutes < 10) {
-      minutes = "0" + minutes;
-    }
-    startTime = "" + hours + ":" + minutes + " " + meridian;
-  }
-  if (!(/^\d\d\:\d\d$/.test(endTime))) {
-    flag = false;
-    document.getElementById('classes_otherClasses_validation').innerHTML = "Please check the end time.";
-  }
-  else {
-    var matches = /^(\d\d)\:(\d\d)$/.exec(endTime);
-    var hours = Number(matches[1]);
-    var minutes = Number(matches[2]);
-    var meridian = "";
-    if (hours > 12) {
-      meridian = "PM";
-      hours -= 12;
-    }
-    else {
-      meridian = "AM";
-    }
-    if (hours == 0) {
-      hours = 12;
-    }
-    if (hours < 10) {
-      hours = "0" + hours;
-    }
-    if (minutes < 10) {
-      minutes = "0" + minutes;
-    }
-    endTime = "" + hours + ":" + minutes + " " + meridian;
-  }
-  if (dept === "Select the department") {
-    flag = false;
-    document.getElementById('classes_otherClasses_validation').innerHTML = "Please select a department.";
-  }
-  if (flag) {
-    // create a node
-    var ele = document.createElement('div');
-    var innerHTML_txt = '<div><h2>CLASS_NAME</h2><p>START_TIME - END_TIME</p><span>DATE</span><div>DEPT</div></div><div><img src="/static/checkbox-checked.png"/><input type="hidden"/></div>';
-    innerHTML_txt =  innerHTML_txt.replace('CLASS_NAME', name);
-    innerHTML_txt =  innerHTML_txt.replace('START_TIME', startTime);
-    innerHTML_txt = innerHTML_txt.replace('END_TIME', endTime);
-    innerHTML_txt = innerHTML_txt.replace('DATE', date);
-    innerHTML_txt = innerHTML_txt.replace('DEPT', dept);
-    ele.innerHTML = innerHTML_txt;
-    ele.querySelector('input[type=hidden]').value = JSON.stringify({
-      date: date,
-      name: name,
-      start_time: startTime,
-      end_time: endTime,
-      department: dept
+// Selected Classes
+var Selected = (function () {
+  var list  = [];
+  var ele = document.getElementById('classes_selection_selection');
+  function indexOf (item) {
+    var flag = true;
+    list.forEach(function (i, index) {
+      if (i) {
+        if (i.start === item.start) {
+          console.log("CLASH ", index);
+          flag = index;
+        }
+      }
     });
-    ele.querySelector('img').addEventListener('click', function () {
-      this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
-    }, false);
-    // append to selectedClasses
-    document.getElementById('classes_selection_selection').appendChild(ele);
-    // clear values
-    document.getElementById('classes_otherClasses_name').value = "";
-    document.getElementById('classes_otherClasses_startTime').value = "";
-    document.getElementById('classes_otherClasses_endTime').value = "";
-    document.getElementById('classes_otherClasses_depts').value = "Select the department";
-    document.getElementById('classes_otherClasses_validation').innerHTML = "";
-  }
-}, false);
-
-var eles = document.querySelectorAll('.radio');
-var eles_length = eles.length;
-for (var i = 0; i < eles_length; i++) {
-  var eles_divs = eles[i].querySelectorAll('div');
-  var eles_divs_length = eles_divs.length;
-  var flag = true;
-  for (var j = 0; j < eles_divs_length; j++) {
-    if (flag) {
-      eles_divs[j].parentNode.querySelector('input').value = eles_divs[j].textContent;
-      eles_divs[j].className = 'selected';
-      flag = false;
+    if (flag === true) {
+      return -1;
     }
-    eles_divs[j].addEventListener('click', function () {
-      this.parentNode.querySelector('input').value = this.textContent;
-      this.parentNode.querySelector('.selected').className = '';
-      this.className = 'selected';
-      updateClasses(document.getElementById("classes_calendar_dates").querySelector("td.selected").querySelector("input[type=hidden]").value, document.getElementById('year_years_selection').value, document.getElementById('batch_batches_selection').value);
+    else {
+      return flag;
+    }
+  };
+  function createClaimCard (class_, index) {
+    var el = document.createElement('div');
+    el.innerHTML = `<div><h2>CLASS_NAME</h2><p>START_TIME - END_TIME</p><span>DATE</span><div>DEPT</div><div class="validation"></div></div><div class="click"><img src="/static/checkbox-checked.png"/><input type="hidden"/></div>`
+      .replace('CLASS_NAME', class_.name)
+      .replace('START_TIME', moment(class_.start).format('h:mm a'))
+      .replace('END_TIME', moment(class_.end).format('h:mm a'))
+      .replace('DATE', moment(class_.start).format('dddd, Do MMMM'))
+      .replace('DEPT', departments[class_.department]);
+    el.setAttribute('data-index', index)
+    el.querySelector('.click').addEventListener('click', function () {
+      var i = parseInt(this.parentNode.getAttribute('data-index'));
+      removeFromList(i);
+      this.parentNode.parentNode.removeChild(this.parentNode);
     }, false);
+    return el;
+  };
+  function renderSelectedList () {
+    if (list.length > 0) {
+      ele.innerHTML = "";
+      list.forEach(function (i, index) {
+        if (i) {
+          ele.appendChild(createClaimCard(i, index));
+        }
+      });
+    }
+    else {
+      ele.innerHTML = `<div class="tooltip" style="text-align:center;">Add the classes you missed.</div>`;
+    }
+  };
+  function removeFromList (index) {
+    list[index] = undefined;
+    Classes.renderListing();
+  };
+  function addToList (index, selectedDept) {
+    // TODO Sort
+    var data = Classes.getCurrentClass(index);
+    data.department = selectedDept;
+    if (indexOf(data) === -1) {
+      list.push(data);
+      renderSelectedList();
+    }
   }
-}
+  function getList () {
+    return list;
+  }
+  renderSelectedList();
+  return {
+    addToList: addToList,
+    indexOf: indexOf,
+    getList: getList
+  }
+})();
 
-var d = new Date();
-var mm = d.getMonth();
-var yyyy = d.getFullYear();
-var currSelection;
-setCalTo(mm, yyyy);
+// Events
+var Events = (function () {
+  var callback = function (event_) {
+    console.log(event_);
+  };
+  var eventstand = document.getElementById('events_stand');
+  eventstand.innerHTML = Object.keys(events).map(function (value) {
+    return '<option value="' + value + '">' + events[value] + '</option>';
+  }).join('');
+  var currEvent = eventstand.value;
+  if (eventActivator) {
+    callback(events[currEvent])
+  }
+  function setCurrEvent (val) {
+    currEvent = val;
+  }
+  eventstand.addEventListener('change', function () {
+    setCurrEvent(this.value);
+  }, false);
+  return function () {
+    return currEvent;
+  }
+})();
+
+// Startup
+(function () {
+  window.addEventListener('load', function () {
+    Classes.renderListing();
+    eventActivator = true;
+  }, false);
+})();

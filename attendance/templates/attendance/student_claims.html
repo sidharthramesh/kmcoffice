@@ -7,13 +7,7 @@
           <h1>Attendance Claims</h1>
           <p>Fill out the form below to claim attendance for events you've had to cover.</p>
         </div>
-        <form action="" style="display:None">
-            {% csrf_token %}
-            {{periodform.department}}
-            {{periodform.batch}}
-            {{studentform.event}}
-          </form>
-        
+
         <div id="name" class="show">
           <div class="tooltip">What's your name?</div>
           <input id="name_text" type="text"/>
@@ -24,33 +18,19 @@
           <input id="email_email" type="email"/>
           <div id="email_validation" class="validation"></div>
         </div>
-        <div id="number">
+        <div id="rollnumber">
           <div class="tooltip">What's your roll number?</div>
-          <input id="number_number" type="number"/>
-          <div id="number_validation" class="validation"></div>
+          <input id="rollnumber_number" type="number"/>
+          <div id="rollnumber_validation" class="validation"></div>
         </div>
         <div id="serialNumber">
           <div class="tooltip">What's your Serial number?</div>
           <input id="serialNumber_number" type="number"/>
           <div id="serialNumber_validation" class="validation"></div>
         </div>
-        <div id="year">
-          <div class="tooltip">Which year are you studying in?</div>
-          <div id="year_years" class="radio">
-            <div class="selected">1<sup>st</sup></div>
-            <div>2<sup>nd</sup></div>
-            <div>3<sup>rd</sup></div>
-            <div>4<sup>th</sup></div>
-            <input id="year_years_selection" type="hidden"/>
-          </div>
-        </div>
         <div id="batch">
-          <div class="tooltip">Which batch are you in?</div>
-          <div id="batch_batches" class="radio">
-            <div class="selected">A</div>
-            <div>B</div>
-            <input id="batch_batches_selection" type="hidden"/>
-          </div>
+          <div class="tooltip">Which year and batch are you in?</div>
+          <div id="batch_batches"></div>
         </div>
         <div id="classes">
           <div class="tooltip">Select the classes you've missed.</div>
@@ -75,46 +55,7 @@
               <tbody id="classes_calendar_dates"></tbody>
             </table>
           </div>
-          <div id="classes_datedList"></div>
-          <div id="classes_otherClasses" class="noshow">
-            <div>
-              <h2>Other</h2>
-              <div><span id="classes_otherClasses_date"></span></div>
-              <div class="tooltip">What's the class?</div>
-              <input type="text" id="classes_otherClasses_name"/>
-              <div id="classes_otherClasses_time">
-                <input type="time" id="classes_otherClasses_startTime"/> to <input type="time" id="classes_otherClasses_endTime"/>
-              </div>
-              <div>
-                <select id="classes_otherClasses_depts">
-                  <option>Select the department</option>
-                  <option>Anatomy</option>
-                  <option>Physiology</option>
-                  <option>Biochemistry</option>
-                  <option>Community Medicine</option>
-                  <option>Pathology</option>
-                  <option>Pharmacology</option>
-                  <option>Microbiology</option>
-                  <option>Forensic Medicine</option>
-                  <option>Medicine</option>
-                  <option>ENT</option>
-                  <option>OBG</option>
-                  <option>Opthalmology</option>
-                  <option>Surgery</option>
-                  <option>Paediatrics</option>
-                  <option>Pulmonary Medicine</option>
-                  <option>Orthopaedics</option>
-                  <option>Dental</option>
-                  <option>Dermatology</option>
-                  <option>Neurology</option>
-                </select>
-              </div>
-              <div id="classes_otherClasses_validation" class="validation"></div>
-            </div>
-            <div>
-              <img id="classes_otherClasses_submit" src="{%static 'checkbox-unchecked.png' %}"/>
-            </div>
-          </div>
+          <div id="classes_datedList"><div class="tooltip" style="text-align:center;">Select the Batch and Date to Load Classes Then.</div></div>
           <div id="classes_selection">
             <div class="tooltip">Selected Classes</div>
             <div id="classes_selection_selection"></div>
@@ -123,8 +64,7 @@
         </div>
         <div id="events">
           <div class="tooltip">Which event did you miss these classes for?</div>
-          <input id="events_text" type="text"/>
-          <div id="events_validation" class="validation"></div>
+          <select id="events_stand"></select>
         </div>
         <div id="thankyou">
           <div>
@@ -133,12 +73,38 @@
           </div>
         </div>
         <div id="buttonTray" class="show">
-          <div id="buttonTray_next">Next</div>
+          <button id="buttonTray_next">Submit</button>
         </div>
+        <div id="status"></div>
       </div>
-      
 
+      <script>
+const departments = (function () {
+  var depts = `{{periodform.department}}`;
+  depts = depts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>(\w+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
+  var obj = {};
+  for (var i = 0; i < depts.length; i += 2) {
+    obj[depts[i]] = depts[i+1];
+  }
+  return obj;
+})();
+const batches = (function () {
+  var bts = `{{periodform.batch}}`;
+  bts = bts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>([\w\d]+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
+  var obj = {};
+  for (var i = 0; i < bts.length; i += 2) {
+    obj[bts[i]] = bts[i+1];
+  }
+  return obj;
+})();
+const events = (function () {
+  var evts = `{{studentform.event}}`;
+  evts = evts.replace(/\s/g, "").split(/\<optionvalue\=\"(\d+)\"\>([\w\d]+)\<\/option\>/g).filter((ele) => {if (ele !== "" && ele.indexOf("select") === -1) return ele;});
+  var obj = {};
+  for (var i = 0; i < evts.length; i += 2) {
+    obj[evts[i]] = evts[i+1];
+  }
+  return obj;
+})();
+      </script>
 {% endblock body %}
-    
-
-
