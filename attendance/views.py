@@ -9,6 +9,8 @@ from django.utils import dateparse
 from django.contrib.auth.decorators import permission_required
 from .forms import ConfirmForm, StatusForm
 from .tasks import send_email
+from django.contrib.auth.decorators import user_passes_test
+
 # Create your views here.
 
 def home(request):
@@ -124,3 +126,27 @@ def delete_preclaim(request,pk):
         preclaim.delete()
         send_email.delay("PreClaim Rejected", reason ,[preclaim.notification_email])
         return render(request,'attendance/dissapproved.html',{'reason':reason,'preclaim':preclaim})
+
+def test_if_facluty(user):
+    if user.username.split('_')[0] == 'faculty':
+        return True
+    else:
+        return False
+@user_passes_test(test_if_facluty)
+def forward_claim(request, pk):
+    preclaim = PreClaim.objects.get(pk=int(pk))
+    user = User.objects.get(username='dean')
+    login_token = utils.get_parameters(user)
+    approve_link = reverse('approve_preclaim',kwargs={'pk':instance.pk})
+    approve_link = add_auth_token(approve_link,login_token)
+    #print(approve_link)
+    disapprove_link = reverse('disapprove_preclaim',kwargs={'pk':instance.pk})
+    disapprove_link = add_auth_token(disapprove_link,login_token)
+    #print(disapprove_link)
+    url = 'http://kmcoffice.herokuapp.com'
+    approve_link = url+approve_link
+    disapprove_link = url+disapprove_link
+    body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':instance})
+    #print(body)
+    send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
+    return render(request,'attendance/approved.html',{'preclaim':preclaim})
