@@ -32,11 +32,11 @@ def get_classes(date_string, batch):
 
       dept = Department.objects.filter(name=c.get('description'))
       if len(dept) > 0:
-        dept = dept[0]
+        dept = dept[0].pk
       else:
         dept = None
     else:
-      
+
       dept = None
       for dep in Department.objects.all():
         #print("Did not get desc. Searching {} in {}".format(c.get('summary'), dep))
@@ -44,8 +44,8 @@ def get_classes(date_string, batch):
           #print("Found")
           dept = dep.pk
           break
-    
-      
+
+
     period = {
       'start':c['start']['dateTime'],
       'end':c['end']['dateTime'],
