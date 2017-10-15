@@ -111,19 +111,18 @@ def create_claims(sender, instance, created, **kwargs):
         instance.students.add(student[0])
     
     if created:
-        if created:
             #users = [user for user in User.objects.all() if user.has_perm('attendance.preclaim_dean_approve')]
         try:
             user = User.objects.get(email=instance.faculty_email)
         except Exception as e:
             print(e)
-            user = User.objects.create_user('faculty_'+instance.faculty_email,instance.faculty_email,faculty_email+'password123')
+            user = User.objects.create_user('faculty_'+instance.faculty_email, instance.faculty_email, instance.faculty_email+'password123')
 
         login_token = utils.get_parameters(user)
-        approve_link = reverse('preclaim_forward',kwargs={'pk':instance.pk})
+        approve_link = reverse('forward_preclaim',kwargs={'pk':instance.pk})
         approve_link = add_auth_token(approve_link,login_token)
         #print(approve_link)
-        disapprove_link = reverse('preclaim_forward',kwargs={'pk':instance.pk})
+        disapprove_link = reverse('forward_preclaim',kwargs={'pk':instance.pk})
         disapprove_link = add_auth_token(disapprove_link,login_token)
         #print(disapprove_link)
         url = 'http://kmcoffice.herokuapp.com'
@@ -133,7 +132,7 @@ def create_claims(sender, instance, created, **kwargs):
         body = render_to_string('attendance/email/faculty.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':instance})
         #print(body)
         send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
-        
+
 
 class Claim(models.Model):
     event = models.ForeignKey(Event,models.CASCADE,'claims')

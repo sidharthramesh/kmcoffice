@@ -1,9 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.utils.timezone import now, timedelta
 from .gcalander import get_classes
 from .models import *
 from django.urls import reverse
 import json
+import mock
+from attendance import views
 # Create your tests here.
 depts = """Anatomy
 Physiology
@@ -41,7 +43,7 @@ class UtilGcalTest(TestCase):
         self.assertEqual(len(classes),5)
         #print(classes)
         self.assertIsNotNone(classes[0].get('department'))
-        self.assertEqual(classes[0].get('department'),Department.objects.get(name='Pharmacology'))
+        self.assertEqual(classes[0].get('department'),Department.objects.get(name='Pharmacology').pk)
         self.assertIsNotNone(classes[0].get('location'))
 
 class PreClaimModelTest(TestCase):
@@ -52,12 +54,15 @@ class PreClaimModelTest(TestCase):
             name="Test Event",
             start_time = now(),
             end_time = now()+timedelta(days=3))
-        
-        preclaim = PreClaim.objects.create(
-            add_roll_numbers=rolls,
-            event = event,
-            notification_email = 'tornadoalert@gmail.com'
-            )
+        with mock.patch('attendance.models.send_email.delay') as mock_email:
+            preclaim = PreClaim.objects.create(
+                add_roll_numbers=rolls,
+                event = event,
+                notification_email = 'tornadoalert@gmail.com', 
+                faculty_email='faculty@gmail.com',
+                )
+            kwargs = mock_email.call_args[1]
+            self.assertEqual(kwargs['recipient_list'], ['faculty@gmail.com'])
         
     def test_student_exists(self):
         self.assertIsNotNone(Student.objects.first())
@@ -82,7 +87,9 @@ class ProcessClaimsView(TestCase):
         )
         for dept in depts.splitlines():
             Department.objects.create(name=dept)
-        
+        self.factory = RequestFactory()
+        dean = User.objects.create_user('dean','dean@dean.com','topsecretpassword123')
+
     def test_process_claims(self):
         batch = Batch.objects.first()
         date = now()+timedelta(days=1)
@@ -136,6 +143,15 @@ class ProcessClaimsView(TestCase):
         self.assertEqual(len(claims),l)
         for c in claims:
             self.assertTrue(c.pre_claim_approved)
+    def test_forward(self):
+        request = self.factory.get(reverse('forward_preclaim',kwargs={'pk':1}))
+        request.user = User.objects.create_user('faculty_someone','kjgfhdkjfghdkjf@gmail.com','sdfjskjhsdkjgh')
+        with mock.patch('attendance.views.send_email.delay') as mock_email:
+            views.forward_claim(request,1)
+            _, kwargs = mock_email.call_args
+            print(kwargs)
+
     def test_preclaim(self):
         preclaim = PreClaim.objects.first()
         print(preclaim.get_classes())
+    
