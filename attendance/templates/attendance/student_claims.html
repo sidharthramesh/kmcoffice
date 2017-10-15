@@ -7,10 +7,6 @@
           <h1>Attendance Claims</h1>
           <p>Fill out the form below to claim attendance for events you've had to cover.</p>
         </div>
-        <form action="" style="display:None">
-            {% csrf_token %}
-            {{studentform.event}}
-        </form>
 
         <div id="name" class="show">
           <div class="tooltip">What's your name?</div>
@@ -60,24 +56,6 @@
             </table>
           </div>
           <div id="classes_datedList"><div class="tooltip" style="text-align:center;">Select the Batch and Date to Load Classes Then.</div></div>
-          <div id="classes_otherClasses" class="noshow">
-            <div>
-              <h2>Other</h2>
-              <div><span id="classes_otherClasses_date"></span></div>
-              <div class="tooltip">What's the class?</div>
-              <input type="text" id="classes_otherClasses_name"/>
-              <div id="classes_otherClasses_time">
-                <input type="time" id="classes_otherClasses_startTime"/> to <input type="time" id="classes_otherClasses_endTime"/>
-              </div>
-              <div>
-                <input id="classes_otherClasses_depts" type="hidden"/>
-              </div>
-              <div id="classes_otherClasses_validation" class="validation"></div>
-            </div>
-            <div>
-              <img id="classes_otherClasses_submit" src="{%static 'checkbox-unchecked.png' %}"/>
-            </div>
-          </div>
           <div id="classes_selection">
             <div class="tooltip">Selected Classes</div>
             <div id="classes_selection_selection"></div>
@@ -86,7 +64,7 @@
         </div>
         <div id="events">
           <div class="tooltip">Which event did you miss these classes for?</div>
-          <input type="hidden" id="events_value"/>
+          <select id="events_stand"></select>
         </div>
         <div id="thankyou">
           <div>
@@ -95,8 +73,9 @@
           </div>
         </div>
         <div id="buttonTray" class="show">
-          <div id="buttonTray_next">Next</div>
+          <button id="buttonTray_next">Submit</button>
         </div>
+        <div id="status"></div>
       </div>
 
       <script>

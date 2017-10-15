@@ -328,6 +328,7 @@ function sendReq () {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open("POST", '/attendance/class_data');
   xmlhttp.setRequestHeader("Content-Type", "application/json");
+  xmlhttp.setRequestHeader("X-CSRF-Token", CSRFTOKEN);
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var lst = JSON.parse(this.responseText);

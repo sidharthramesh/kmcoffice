@@ -25,9 +25,10 @@ def class_data(request):
             return JsonResponse({
         "error":"batch not active"})
         classes = get_classes(date,batch)
+        print(classes)
         return JsonResponse({
     'number': len(classes),
-    'classes':classes
+    'classes': classes
     })
 
     if request.method == 'POST':
@@ -46,7 +47,7 @@ def process_claims(request):
     student_data = {k:data[k] for k in ['name','roll_no','email','serial','event']}
     #print(student_data)
     student_form = StudentForm(student_data)
-    
+
     if student_form.is_valid():
         pass
         #print("Student Form valid")
@@ -89,7 +90,7 @@ def process_claims(request):
                 period = p,
                 student = student,
             )
-    
+
     return JsonResponse({"success":True})
 
 def status_redirect(request):
@@ -107,7 +108,7 @@ def approve_preclaim(request, pk):
         preclaim.dean_approved=True
         preclaim.save()
         send_email.delay("PreClaim Approved", "The PreClaim has been approved.",'sidharth@mail.manipalconnect.com',[preclaim.notification_email])
-        
+
         return render(request,'attendance/approved.html',{'preclaim':preclaim})
 
 @permission_required('attendance.preclaim_dean_approve')
@@ -115,9 +116,9 @@ def delete_preclaim(request,pk):
     preclaim = PreClaim.objects.get(pk=int(pk))
     if request.method == 'GET':
         return render(request,'attendance/confirm.html',{'preclaim':preclaim,'form':ConfirmForm})
-    
+
     if request.method == 'POST':
-        
+
         f = ConfirmForm(request.POST)
         if f.is_valid():
             reason = f.cleaned_data.get('reason')

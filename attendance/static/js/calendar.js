@@ -154,7 +154,6 @@ var CalendarJs = (function () {
           calendar.push(week);
         }
 
-console.log(calendar);
         return calendar;
       },
 
