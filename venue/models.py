@@ -39,31 +39,33 @@ class Booking(models.Model):
 def add_auth_token(link,login_token):
     link+='?method=magic&url_auth_token={}'.format(login_token['url_auth_token'])
     return link
+
 @receiver(post_save, sender=Booking)
 def create_booking(sender, instance, created, **kwargs):
     if created:
-        users = [user for user in User.objects.all() if user.has_perm('attendance.preclaim_dean_approve')]
-        for user in users:
-            login_token = utils.get_parameters(user)
-            print()
-            approve_link = reverse('approve_booking',kwargs={'pk':instance.pk})
-            approve_link = add_auth_token(approve_link,login_token)
-            #print(approve_link)
-            disapprove_link = reverse('disapprove_booking',kwargs={'pk':instance.pk})
-            disapprove_link = add_auth_token(disapprove_link,login_token)
-            #print(disapprove_link)
-            url = 'http://kmcoffice.herokuapp.com'
-            approve_link = url+approve_link
-            disapprove_link = url+disapprove_link
-            body = render_to_string(
-                'venue/email/dean.html',{
-                    'approve':approve_link,
-                    'disapprove':disapprove_link,
-                    'booking':instance,
-                    'quote':get_random_quote()})
-            #print(body)
-            send_email.delay("Venue Booking Approval",'',from_email='venuebooking@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
-            
+        #users = [user for user in User.objects.all() if user.has_perm('attendance.preclaim_dean_approve')]
+        user = User.objects.get(username='dean')
+        #print("Found {} user with dean permission".format(len(users)))
+        
+        login_token = utils.get_parameters(user)
+        #print()
+        approve_link = reverse('approve_booking',kwargs={'pk':instance.pk})
+        approve_link = add_auth_token(approve_link,login_token)
+        #print(approve_link)
+        disapprove_link = reverse('disapprove_booking',kwargs={'pk':instance.pk})
+        disapprove_link = add_auth_token(disapprove_link,login_token)
+        #print(disapprove_link)
+        url = 'http://kmcoffice.herokuapp.com'
+        approve_link = url+approve_link
+        disapprove_link = url+disapprove_link
+        body = render_to_string(
+            'venue/email/dean.html',{
+                'approve':approve_link,
+                'disapprove':disapprove_link,
+                'booking':instance,
+                'quote':get_random_quote()})
+        #print(user.email)
+        send_email.delay("Venue Booking Approval",'',from_email='venuebooking@mail.manipalconnect.com',to_email=[user.email], html_message=body)
 class EventCalander(models.Model):
     name = models.CharField(max_length=200, default='Default Event')
     calander_id = models.TextField()
