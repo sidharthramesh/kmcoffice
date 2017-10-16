@@ -32,7 +32,7 @@ class BookingModelCase(TestCase):
             self.assertTrue(mock_email.called)
             #mock_email.assert_called_with(to_email='tornadoalert@gmail.com')
             kwargs = mock_email.call_args[1]
-            self.assertEqual(kwargs['to_email'],['tornadoalert@gmail.com'])
+            self.assertEqual(kwargs['recipient_list'],['tornadoalert@gmail.com'])
     #with mock.patch('venue.views.send_email.delay') as mock_email:
 
     def test_create_event(self):
