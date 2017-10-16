@@ -65,7 +65,7 @@ def create_booking(sender, instance, created, **kwargs):
                 'booking':instance,
                 'quote':get_random_quote()})
         #print(user.email)
-        send_email.delay("Venue Booking Approval",'',from_email='venuebooking@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
+        send_email.delay("Venue Booking Approval",'',from_email='venue@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
 class EventCalander(models.Model):
     name = models.CharField(max_length=200, default='Default Event')
     calander_id = models.TextField()
