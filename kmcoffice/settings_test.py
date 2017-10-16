@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'snowpenguin.django.recaptcha2',
     'django_celery_beat',
     'venue.apps.VenueConfig',
     'attendance.apps.AttendanceConfig',
@@ -180,3 +181,4 @@ if 'account.json' not in os.listdir():
         f.write(string)
 
 #TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
+GOOGLE_RECAPTCHA_SECRET_KEY = config('RECAPTCHA')

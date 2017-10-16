@@ -15,6 +15,7 @@ django-celery==3.2.1
 django-celery-beat==1.0.1
 django-decouple==2.1
 django-flat-responsive==1.4.1
+django-recaptcha2==1.0.3
 django-sesame==1.2
 django-tastypie==0.14.0
 google-api-python-client==1.6.4
@@ -22,8 +23,10 @@ gunicorn==19.7.1
 httplib2==0.10.3
 idna==2.6
 kombu==4.1.0
+mock==2.0.0
 newrelic==2.92.0.78
 oauth2client==4.1.2
+pbr==3.1.1
 psycopg2==2.7.3
 py==1.4.34
 pyasn1==0.3.6
