@@ -1,28 +1,21 @@
 {% extends "venue/base.html" %}
 {% block body %}
 <section class="container">
-    <h3>Batches Timetables</h3>
+    <h3>Timetables</h3>
 
     {% for batch in batches %}
     <h3>
-        <a href="https://calendar.google.com/calendar/ical/{{batch.calander_id|urlencode}}/public/basic.ics">{{batch.semester}} {{batch.batch}}</a>
+        <a href="https://calendar.google.com/calendar/render?cid={{batch.calander_id|urlencode}}">{{batch.semester}} {{batch.batch}}</a>
     </h3>
-    <input id="batch{{batch.pk}}" type="text" value="{{batch.calander_id}}">
-    <button class="clp" data-clipboard-target="#batch{{batch.pk}}">
-        copy
-    </button>
     {% endfor %}
     
 
 
         {% for cal in eventcals %}
         <h3>
-            <a href="https://calendar.google.com/calendar/ical/{{cal.calander_id|urlencode}}/public/basic.ics">{{cal.name}}</a>
+            <a href="https://calendar.google.com/calendar/render?cid={{cal.calander_id|urlencode}}">{{cal.name}}</a>
+            
         </h3>
-        <input id="event{{cal.pk}}" type="text" value="{{cal.calander_id}}">
-        <button class="clp" data-clipboard-target="#event{{cal.pk}}">
-            copy
-        </button>
         {% endfor %}
 
 <script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
