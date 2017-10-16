@@ -8,6 +8,8 @@ import json
 import httplib2
 from oauth2client.service_account import ServiceAccountCredentials
 from apiclient.discovery import build
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
+from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 class VenueBookingForm(ModelForm):
     class Meta:
         model = Booking
@@ -53,11 +55,16 @@ class VenueBookingForm(ModelForm):
                         raise ValidationError("{} is not available at requested time slot because of clash with {}".format(venue.name,event["summary"]))
         return cleaned_data
 
+class CaptchaForm(VenueBookingForm):
+    captcha = ReCaptchaField(widget=ReCaptchaWidget())
+
+    class Meta(VenueBookingForm.Meta):
+        fields = VenueBookingForm.Meta.fields + ['captcha']
+
 class StatusForm(ModelForm):
     class Meta:
         model = Booking
         fields = ['status']
-
 class LoginForm(AuthenticationForm):
     username = CharField(max_length=30)
     password = CharField(max_length=30, 

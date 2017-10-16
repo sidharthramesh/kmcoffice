@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import generic
 from .models import Booking
-from .forms import VenueBookingForm, StatusForm
+from .forms import VenueBookingForm, StatusForm, CaptchaForm
 from django.contrib.auth.decorators import permission_required
 from attendance.tasks import send_email
 from django.shortcuts import reverse
@@ -13,7 +13,7 @@ from attendance.forms import ConfirmForm
 
 class BookEvent(generic.edit.CreateView):
     success_url = 'thankyou'
-    form_class = VenueBookingForm
+    form_class = CaptchaForm
     template_name = 'venue/booking_form.html'
 
 class Thankyou(generic.TemplateView):

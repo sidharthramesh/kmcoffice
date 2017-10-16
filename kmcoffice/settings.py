@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'snowpenguin.django.recaptcha2',
     'django_celery_beat',
     'venue.apps.VenueConfig',
     'attendance.apps.AttendanceConfig',
@@ -176,3 +177,6 @@ if 'account.json' not in os.listdir():
     string = cypher.decrypt(config('ENCRYPT_GOOGLE').encode())
     with open('account.json','wb') as f:
         f.write(string)
+
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
