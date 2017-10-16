@@ -50,17 +50,23 @@ class EventDetail(generic.UpdateView):
 def approve_booking(request, pk):
     if request.method == 'GET':
         booking = Booking.objects.get(pk=int(pk))
-        booking.status='3'
-        booking.save()
+        
         # create google calander event
+        print(type(booking.start_time))
+        start = booking.start_time.strftime("%Y-%m-%dT%H:%M:%S.%f+05:30")
+        end = booking.end_time.strftime("%Y-%m-%dT%H:%M:%S.%f+05:30")
         insert_event.delay(
             booking.title,
             booking.venue.name,
             booking.description,
-            booking.start_time,
-            booking.end_time
+            start,
+            end,
             )
         
+        booking.status='3'
+        booking.save()
+
+        #send email to notify
         send_email.delay("Venue Booking Approved", "The Booking for {}  at {} has been approved.".format(booking.title,booking.venue.name),'venue@mail.manipalconnect.com',[booking.notification_email])
         return render(request,'venue/approved.html',{'booking':booking})
 
