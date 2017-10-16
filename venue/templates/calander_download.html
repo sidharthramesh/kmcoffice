@@ -2,21 +2,31 @@
 {% block body %}
 <section class="container">
     <h3>Batches Timetables</h3>
-<ul>
+
     {% for batch in batches %}
-    <li>
+    <h3>
         <a href="https://calendar.google.com/calendar/ical/{{batch.calander_id|urlencode}}/public/basic.ics">{{batch.semester}} {{batch.batch}}</a>
-    </li>
+    </h3>
+    <input id="batch{{batch.pk}}" type="text" value="{{batch.calander_id}}">
+    <button class="clp" data-clipboard-target="#batch{{batch.pk}}">
+        📋
+    </button>
     {% endfor %}
     
-</ul>
-<h3>Events</h3>
-<ul>
+
+
         {% for cal in eventcals %}
-        <li>
+        <h3>
             <a href="https://calendar.google.com/calendar/ical/{{cal.calander_id|urlencode}}/public/basic.ics">{{cal.name}}</a>
-        </li>
+        </h3>
+        <input id="event{{cal.pk}}" type="text" value="{{cal.calander_id}}">
+        <button class="clp" data-clipboard-target="#event{{cal.pk}}">
+            📋
+        </button>
         {% endfor %}
-</ul>
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+<script>new Clipboard('.clp');</script>
+
 </section>
 {% endblock body %}
