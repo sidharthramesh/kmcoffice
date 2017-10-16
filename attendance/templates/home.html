@@ -1,12 +1,32 @@
 {% extends "base.html" %}
+{% load static %}
+{% block title %}
+KMC Office
+{% endblock title %}
+
+{% block nav %}
+<nav class="navigation">
+        <section class="container">
+            <a href="/" class="navigation-title"><h3>KMC Office</h3></a>
+        </section>
+    </nav>
+{% endblock nav %}
 
 {% block body %}
+<hr>
 <section class="container">
-    <ul>
-<li><a href="attendance/">Submit attendance</a></li>
-<li><a href="venue/">Book a venue</a></li>
-<li><a href="{% url 'cals' %}">Calendars</a></li>
-</ul>
 
+
+<h4><a href="attendance/">Submit attendance</a></h4>
+<h4><a href="venue/">Book a venue</a></h4>
+<h4><a href="{% url 'cals' %}">Calendars</a></h4    >
+
+
+</section>
+<hr>
+<section class="container">
+        
+      <h1><img src="{% static 'text.gif' %}" alt="Vote for Swara"></h1>
+        <p>To advertise here, contact 9585841964</p>
 </section>
 {% endblock body %}
