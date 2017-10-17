@@ -9,7 +9,7 @@ from sesame import utils
 from django.contrib.auth.models import Permission, User
 from .tasks import send_email
 from django.template.loader import render_to_string
-
+from venue.quotes import get_random_quote
 # Create your models here.
 class Department(models.Model):
     name = models.CharField(max_length=200)
@@ -129,9 +129,9 @@ def create_claims(sender, instance, created, **kwargs):
         approve_link = url+approve_link
         disapprove_link = url+disapprove_link
         disapprove_link = None
-        body = render_to_string('attendance/email/faculty.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':instance})
+        body = render_to_string('attendance/email/faculty.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':instance, 'quote':get_random_quote()})
         #print(body)
-        send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
+        send_email.delay("PreClaim Approval",'',from_email='attendance@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
 
 
 class Claim(models.Model):

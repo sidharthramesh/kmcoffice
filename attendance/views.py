@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import permission_required
 from .forms import ConfirmForm, StatusForm
 from .tasks import send_email
 from django.contrib.auth.decorators import user_passes_test
-
+from venue.quotes import get_random_quote
 # Create your views here.
 
 def home(request):
@@ -148,7 +148,7 @@ def forward_claim(request, pk):
     url = 'http://kmcoffice.herokuapp.com'
     approve_link = url+approve_link
     disapprove_link = url+disapprove_link
-    body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':preclaim})
+    body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':preclaim,'quote':get_random_quote})
     #print(body)
-    send_email.delay("PreClaim Approval",'',from_email='sidharth@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
+    send_email.delay("PreClaim Approval",'',from_email='attendance@mail.manipalconnect.com',recipient_list=[user.email], html_message=body)
     return render(request,'attendance/approved.html',{'preclaim':preclaim})
