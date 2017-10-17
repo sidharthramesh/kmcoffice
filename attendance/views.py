@@ -11,6 +11,7 @@ from .forms import ConfirmForm, StatusForm
 from .tasks import send_email
 from django.contrib.auth.decorators import user_passes_test
 from venue.quotes import get_random_quote
+import csv
 # Create your views here.
 
 def home(request):
@@ -103,6 +104,16 @@ def status_redirect(request):
     else:
         return render(request,'attendance/status_form.html',{'form':StatusForm})
 
+def download_claims(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="all_claims.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(["Serial","Reg no","Name","Date","Class missed","Time","Event","Semester"])
+    for claim in Claim.objects.all():
+        print(claim.period)
+        writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, claim.period.start_time.strftime('%d %B %Y'), claim.period.name, "{} to {}".format(claim.period.start_time.strftime("%-I:%M %p"), claim.period.end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
+    return response
 
 @permission_required('attendance.preclaim_dean_approve')
 def approve_preclaim(request, pk):
