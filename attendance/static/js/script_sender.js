@@ -35,6 +35,14 @@
 **/
 // Payload
 (function () {
+  function createCSV (payload) {
+    var lines = ["Serial,Reg no,Name,Date,Class missed,Time,Event,Semester"];
+    payload.selectedClasses.forEach(function (el) {
+      lines.push([payload.serial, payload.roll_no, payload.name, moment.(el.start).format(""), el.name, moment(el.start).format("") + " to " + moment(el.end).format(""), payload.event, Batches[el.batch]].join(", "));
+    });
+    return lines.join("\n")
+  }
+
   var STATUS = document.getElementById('status');
   var BUTTON = document.getElementById('buttonTray_next')
   BUTTON.addEventListener('click', function () {
@@ -136,9 +144,6 @@
         if (this.readyState == 4 && this.status == 200) {
           if (JSON.parse(this.responseText).success) {
             STATUS.innerHTML = "The claims have been sucessfully submitted.";
-            setTimeout(function () {
-              BUTTON.removeAttribute('disabled');
-            }, 1000);
           }
           else {
             STATUS.innerHTML = "Something is Invalid with your claims.";
@@ -152,6 +157,9 @@
       xmlhttp.send(JSON.stringify(payload));
       STATUS.innerHTML = "Processing your Claims.";
       BUTTON.setAttribute('disabled', true);
+
+      // Create CSV
+      var csv = createCSV(payload);
     }
   }, false);
 })();
