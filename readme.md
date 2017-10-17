@@ -1,6 +1,6 @@
 # KMC Office
 
-[![Build Status](https://travis-ci.com/tornadoalert/kmcoffice.svg?token=7PCeCtrxzkEu6Boo2Hfr&branch=master)](https://travis-ci.com/tornadoalert/kmcoffice)
+[![Build Status](https://travis-ci.org/tornadoalert/kmcoffice.svg?branch=master)](https://travis-ci.org/tornadoalert/kmcoffice)
 
 ## Current apps
 - Attendance Claims
