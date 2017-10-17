@@ -5,4 +5,5 @@
 ## Current apps
 - Attendance Claims
 - Venue Booking
+- Calendars
 
