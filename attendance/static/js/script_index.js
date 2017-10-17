@@ -250,7 +250,7 @@ var Selected = (function () {
   function addToList (index, selectedDept) {
     // TODO Sort
     var data = Classes.getCurrentClass(index);
-    data.department = selectedDept;
+    data.department = selectedDept ? selectedDept : data.department;
     if (indexOf(data) === -1) {
       list.push(data);
       renderSelectedList();
