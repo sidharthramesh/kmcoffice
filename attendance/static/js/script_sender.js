@@ -97,6 +97,11 @@
     }
     // Selected Classes
     var selectedClasses = Selected.getList();
+    selectedClasses = selectedClasses.filter(function (el) {
+      if (el) {
+        return el;
+      }
+    });
     if (selectedClasses.length === 0) {
       var err_ele = document.getElementById('classes_validation');
       err_ele.innerHTML = "Please select the classes you have missed.";
