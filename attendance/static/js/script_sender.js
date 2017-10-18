@@ -33,18 +33,28 @@
   ]
 }
 **/
+/**
+
+Serial No.,Reg No.,Name,Date,Class Missed,Time,Event,Semester
+5,150101007,Ashwin,18th October 2017,Medicine,08:00 am to 09:00 am,1,
+5,150101007,Ashwin,18th October 2017,Clinical postings,09:30 am to 12:30 pm,1,
+5,150101007,Ashwin,18th October 2017,OBG,02:00 pm to 03:00 pm,1,
+
+**/
 // Payload
 (function () {
   function createCSV (payload) {
-    var lines = ["Serial,Reg no,Name,Date,Class missed,Time,Event,Semester"];
+    var lines = ["Serial No.,Reg No.,Name,Date,Class Missed,Time,Event,Semester"];
     payload.selectedClasses.forEach(function (el) {
-      lines.push([payload.serial, payload.roll_no, payload.name, moment.(el.start).format(""), el.name, moment(el.start).format("") + " to " + moment(el.end).format(""), payload.event, Batches[el.batch]].join(", "));
+      lines.push([payload.serial, payload.roll_no, payload.name, moment(el.start).format("Do MMMM YYYY"), el.name, moment(el.start).format("hh:mm a") + " to " + moment(el.end).format("hh:mm a"), payload.event, batches[el.batch]].join(","));
     });
-    return lines.join("\n")
+    return lines.join("\n");
   }
 
   var STATUS = document.getElementById('status');
-  var BUTTON = document.getElementById('buttonTray_next')
+  var BUTTON = document.getElementById('buttonTray_next');
+  var DOWNLOAD = document.getElementById('download');
+  var CSVDATA = "";
   BUTTON.addEventListener('click', function () {
     var flag = true;
     // Name
@@ -159,7 +169,15 @@
       BUTTON.setAttribute('disabled', true);
 
       // Create CSV
-      var csv = createCSV(payload);
+      CSVDATA = createCSV(payload);
+      DOWNLOAD.innerHTML = `<p>If you'd like to download the excel format of these claims, you can do so here.</p><button id="download_link">Download</button>`;
+      DOWNLOAD.querySelector('button').addEventListener('click', function () {
+        var blob = new Blob([CSVDATA], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "claims.csv");
+      }, false);
+
+      // Scroll down
+      document.getElementById('viewport').scrollTop = document.getElementById('viewport').scrollHeight;
     }
   }, false);
 })();
