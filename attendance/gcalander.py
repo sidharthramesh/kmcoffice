@@ -27,6 +27,7 @@ def get_classes(date_string, batch):
   #print(s)
   classes = []
   for c in s['items']:
+    """
     des = c.get('description')
     if not des is None:
 
@@ -38,12 +39,13 @@ def get_classes(date_string, batch):
     else:
 
       dept = None
-      for dep in Department.objects.all():
-        print("Did not get desc. Searching {} in {}".format(c.get('summary'), dep))
-        if dep.name.lower() in c.get('summary').lower():
-          print("Found")
-          dept = dep.pk
-          break
+    """
+    for dep in Department.objects.all():
+      print("Did not get desc. Searching {} in {}".format(c.get('summary'), dep))
+      if dep.name.lower() in c.get('summary').lower():
+        print("Found")
+        dept = dep.pk
+        break
 
 
     period = {
