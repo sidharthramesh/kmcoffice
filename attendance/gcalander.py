@@ -27,26 +27,13 @@ def get_classes(date_string, batch):
   #print(s)
   classes = []
   for c in s['items']:
-    """
-    des = c.get('description')
-    if not des is None:
-
-      dept = Department.objects.filter(name=c.get('description'))
-      if len(dept) > 0:
-        dept = dept[0].pk
-      else:
-        dept = None
+    des = c.get('description',c.get('summary'))
+    dept = Department.objects.filter(name__contains=des.lower())
+    if len(dept) > 0:
+      dept = dept[0].pk
     else:
-
       dept = None
-    """
-    dept = None
-    for dep in Department.objects.all():
-      print("Did not get desc. Searching {} in {}".format(c.get('summary'), dep))
-      if dep.name.lower() in c.get('summary').lower():
-        print("Found")
-        dept = dep.pk
-        break
+      print("Input {}. Returned None".format(des))
 
 
     period = {
