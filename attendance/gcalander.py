@@ -40,6 +40,7 @@ def get_classes(date_string, batch):
 
       dept = None
     """
+    dept = None
     for dep in Department.objects.all():
       print("Did not get desc. Searching {} in {}".format(c.get('summary'), dep))
       if dep.name.lower() in c.get('summary').lower():
