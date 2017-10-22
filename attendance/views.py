@@ -110,10 +110,10 @@ def download_claims(request):
     response['Content-Disposition'] = 'attachment; filename="all_claims.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(["Serial","Reg no","Name","Date","Class missed","Time","Event","Semester"])
+    writer.writerow(["Serial","Reg no","Name","Date","Class missed","Department","Time","Event","Semester"])
     for claim in Claim.objects.all():
         print(claim.period)
-        writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, claim.period.start_time.strftime('%d %B %Y'), claim.period.name, "{} to {}".format(claim.period.start_time.strftime("%-I:%M %p"), claim.period.end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
+        writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, claim.period.start_time.strftime('%d %B %Y'), claim.period.name, claim.period.department.name, "{} to {}".format(claim.period.start_time.strftime("%-I:%M %p"), claim.period.end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
     return response
 
 @permission_required('attendance.preclaim_dean_approve')
