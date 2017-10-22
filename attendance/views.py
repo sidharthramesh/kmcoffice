@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from .models import *
 from .gcalander import get_classes
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 from json import loads
 from .forms import StudentForm, PeriodForm
 from django.utils import dateparse
@@ -19,7 +20,7 @@ def home(request):
 
 def index(request):
     return render(request,'attendance/student_claims.html',{'periodform':PeriodForm, 'studentform':StudentForm})
-
+@csrf_exempt
 def class_data(request):
     if request.method == 'GET':
         date = request.GET.get('date')
