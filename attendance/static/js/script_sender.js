@@ -46,7 +46,7 @@ Serial No.,Reg No.,Name,Date,Class Missed,Time,Event,Semester
   function createCSV (payload) {
     var lines = ["Serial No.,Reg No.,Name,Date,Class Missed,Time,Event,Semester"];
     payload.selectedClasses.forEach(function (el) {
-      lines.push([payload.serial, payload.roll_no, payload.name, moment(el.start).format("Do MMMM YYYY"), el.name, moment(el.start).format("hh:mm a") + " to " + moment(el.end).format("hh:mm a"), events[payload.event], batches[el.batch]].join(","));
+      lines.push([payload.serial, payload.roll_no, payload.name, moment(el.start).format("Do MMMM YYYY"), el.name, moment(el.start).format("hh:mm a") + " to " + moment(el.end).format("hh:mm a"), events[payload.event], parseInt(batches[el.batch])].join(","));
     });
     return lines.join("\n");
   }
