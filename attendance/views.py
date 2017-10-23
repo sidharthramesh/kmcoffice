@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from json import loads
 from .forms import StudentForm, PeriodForm
 from django.utils import dateparse
+from django.utils import timezone
 from django.contrib.auth.decorators import permission_required
 from .forms import ConfirmForm, StatusForm
 from .tasks import send_email
@@ -113,7 +114,10 @@ def download_claims(request):
     writer.writerow(["Serial","Reg no","Name","Date","Class missed","Department","Time","Event","Semester"])
     for claim in Claim.objects.all():
         print(claim.period)
-        writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, claim.period.start_time.strftime('%d %B %Y'), claim.period.name, claim.period.department.name, "{} to {}".format(claim.period.start_time.strftime("%-I:%M %p"), claim.period.end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
+        delta = timezone.timedelta(minutes=(5*60)+30)
+        start_time = claim.period.start_time + delta
+        end_time = claim.period.end_time + delta
+        writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, start_time.strftime('%d %B %Y'), claim.period.name, claim.period.department.name, "{} to {}".format(start_time.strftime("%-I:%M %p"), end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
     return response
 
 @permission_required('attendance.preclaim_dean_approve')
