@@ -26,6 +26,8 @@ def get_classes(date_string, batch):
   #print(a.status_code)
   #print(s)
   classes = []
+  if s.get('items') is None:
+    return classes
   for c in s.get('items'):
     des = c.get('description')
     if not des is None:
