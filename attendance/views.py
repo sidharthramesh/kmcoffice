@@ -161,7 +161,7 @@ def forward_claim(request, pk):
     disapprove_link = reverse('disapprove_preclaim',kwargs={'pk':pk})
     disapprove_link = add_auth_token(disapprove_link,login_token)
     #print(disapprove_link)
-    url = 'http://kmcoffice.herokuapp.com'
+    url = 'http://kmcmanipal.herokuapp.com'
     approve_link = url+approve_link
     disapprove_link = url+disapprove_link
     body = render_to_string('attendance/email/dean.html',{'approve':approve_link,'disapprove':disapprove_link,'preclaim':preclaim,'quote':get_random_quote})

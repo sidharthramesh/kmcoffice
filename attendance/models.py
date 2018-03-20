@@ -125,7 +125,7 @@ def create_claims(sender, instance, created, **kwargs):
         disapprove_link = reverse('forward_preclaim',kwargs={'pk':instance.pk})
         disapprove_link = add_auth_token(disapprove_link,login_token)
         #print(disapprove_link)
-        url = 'http://kmcoffice.herokuapp.com'
+        url = 'http://kmcmanipal.herokuapp.com'
         approve_link = url+approve_link
         disapprove_link = url+disapprove_link
         disapprove_link = None
