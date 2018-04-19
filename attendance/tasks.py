@@ -33,7 +33,7 @@ def generate_csv():
         end_time = claim.period.end_time + delta
         writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, start_time.strftime('%d %B %Y'), claim.period.name, claim.period.department.name, "{} to {}".format(start_time.strftime("%-I:%M %p"), end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
     
-    message = EmailMessage("All Claims {}".format(datetime.datetime.today().strftime("%d %b %Y")),"Claims are attached","tornadoalert@gmail.com",[TO_EMAIL])
+    message = EmailMessage("All Claims {}".format(datetime.datetime.today().strftime("%d %b %Y")),"Claims are attached","attendance@mail.manipalconnect.com",[TO_EMAIL])
     print("Sendin to {}".format(TO_EMAIL))
     message.attach('all_clais.csv', csvfile.getvalue(), 'text/csv')
     message.send()
