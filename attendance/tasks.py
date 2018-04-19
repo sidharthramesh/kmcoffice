@@ -1,6 +1,11 @@
 from celery import shared_task, task
 import requests, datetime
 from django.core.mail import send_mail as mail
+from django.core.mail import EmailMessage
+from io import StringIO
+import timezone
+from attendance.models import Claim
+import csv
 @task
 def add(a=3,b=1):
     return a+b
@@ -13,3 +18,20 @@ def ping():
 @shared_task
 def send_email(*args,**kwargs):
     return mail(*args,**kwargs)
+
+@task
+def generate_csv(to_email):
+    csvfile = StringIO()
+    writer = csv.writer(csvfile)
+
+    writer.writerow(["Serial","Reg no","Name","Date","Class missed","Department","Time","Event","Semester"])
+    for claim in Claim.objects.all():
+        print(claim.period)
+        delta = timezone.timedelta(minutes=(5*60)+30)
+        start_time = claim.period.start_time + delta
+        end_time = claim.period.end_time + delta
+        writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, start_time.strftime('%d %B %Y'), claim.period.name, claim.period.department.name, "{} to {}".format(start_time.strftime("%-I:%M %p"), end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
+    
+    message = EmailMessage("All Claims {}".format(datetime.datetime.today().strftime("%d %b %Y")),"Claims are attached","tornadoalert@gmail.com",[to_email])
+    message.attach('all_clais.csv', csvfile.getvalue(), 'text/csv')
+    message.send()

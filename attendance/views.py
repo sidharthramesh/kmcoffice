@@ -10,7 +10,7 @@ from django.utils import dateparse
 from django.utils import timezone
 from django.contrib.auth.decorators import permission_required
 from .forms import ConfirmForm, StatusForm
-from .tasks import send_email
+from .tasks import send_email, generate_csv
 from django.contrib.auth.decorators import user_passes_test
 from venue.quotes import get_random_quote
 import csv
@@ -107,18 +107,9 @@ def status_redirect(request):
         return render(request,'attendance/status_form.html',{'form':StatusForm})
 
 def download_claims(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="all_claims.csv"'
-
-    writer = csv.writer(response)
-    writer.writerow(["Serial","Reg no","Name","Date","Class missed","Department","Time","Event","Semester"])
-    for claim in Claim.objects.all():
-        print(claim.period)
-        delta = timezone.timedelta(minutes=(5*60)+30)
-        start_time = claim.period.start_time + delta
-        end_time = claim.period.end_time + delta
-        writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, start_time.strftime('%d %B %Y'), claim.period.name, claim.period.department.name, "{} to {}".format(start_time.strftime("%-I:%M %p"), end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
-    return response
+    to_email = "tornadoalert@gmail.com"
+    generate_csv.delay(to_email)
+    return HttpResponse("The mail with attachment will be sent to {}".format(to_email))
 
 @permission_required('attendance.preclaim_dean_approve')
 def approve_preclaim(request, pk):
