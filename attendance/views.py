@@ -14,6 +14,7 @@ from .tasks import send_email, generate_csv
 from django.contrib.auth.decorators import user_passes_test
 from venue.quotes import get_random_quote
 import csv
+from kmcoffice.settings import TO_EMAIL
 # Create your views here.
 
 def home(request):
@@ -107,9 +108,8 @@ def status_redirect(request):
         return render(request,'attendance/status_form.html',{'form':StatusForm})
 
 def download_claims(request):
-    to_email = "tornadoalert@gmail.com"
-    generate_csv.delay(to_email)
-    return HttpResponse("The mail with attachment will be sent to {}".format(to_email))
+    generate_csv.delay()
+    return HttpResponse("The mail with attachment will be sent to {}".format(TO_EMAIL))
 
 @permission_required('attendance.preclaim_dean_approve')
 def approve_preclaim(request, pk):

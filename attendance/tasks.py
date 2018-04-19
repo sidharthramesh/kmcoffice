@@ -5,6 +5,7 @@ from django.core.mail import EmailMessage
 from io import StringIO
 from django.utils import timezone
 import csv
+from kmcoffice.settings import TO_EMAIL
 @task
 def add(a=3,b=1):
     return a+b
@@ -19,7 +20,7 @@ def send_email(*args,**kwargs):
     return mail(*args,**kwargs)
 
 @task
-def generate_csv(to_email):
+def generate_csv():
     from attendance.models import Claim
     csvfile = StringIO()
     writer = csv.writer(csvfile)
