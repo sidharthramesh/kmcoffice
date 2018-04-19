@@ -26,13 +26,15 @@ def generate_csv():
     writer = csv.writer(csvfile)
 
     writer.writerow(["Serial","Reg no","Name","Date","Class missed","Department","Time","Event","Semester"])
+    print("Making CSV file")
     for claim in Claim.objects.all():
-        print(claim.period)
         delta = timezone.timedelta(minutes=(5*60)+30)
         start_time = claim.period.start_time + delta
         end_time = claim.period.end_time + delta
         writer.writerow([claim.student.serial, claim.student.roll_no, claim.student.name, start_time.strftime('%d %B %Y'), claim.period.name, claim.period.department.name, "{} to {}".format(start_time.strftime("%-I:%M %p"), end_time.strftime("%-I:%M %p")), claim.event.name, claim.period.batch.semester])
     
     message = EmailMessage("All Claims {}".format(datetime.datetime.today().strftime("%d %b %Y")),"Claims are attached","tornadoalert@gmail.com",[TO_EMAIL])
+    print("Sendin to {}".format(TO_EMAIL))
     message.attach('all_clais.csv', csvfile.getvalue(), 'text/csv')
     message.send()
+    print("Sent!")
