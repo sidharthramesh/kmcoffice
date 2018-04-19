@@ -3,8 +3,7 @@ import requests, datetime
 from django.core.mail import send_mail as mail
 from django.core.mail import EmailMessage
 from io import StringIO
-import timezone
-from attendance.models import Claim
+from django.utils import timezone
 import csv
 @task
 def add(a=3,b=1):
@@ -21,6 +20,7 @@ def send_email(*args,**kwargs):
 
 @task
 def generate_csv(to_email):
+    from attendance.models import Claim
     csvfile = StringIO()
     writer = csv.writer(csvfile)
 

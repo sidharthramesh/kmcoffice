@@ -7,10 +7,4 @@ install:
 - pip install -r requirements.txt
 script:
 - python manage.py test --settings=kmcoffice.settings_test
-deploy:
-  provider: heroku
-  api_key:
-    secure: RXNjfrM7GeBeR5uw6BwGX+iNxQa/o+J/lkV91G7P/pzsThyyBNvpHnNuPIWz9H3Onhi2SgkutiectxiocxlMhjvmIwPte3+5ama56bLeMNZjzuumjZRoSiN4oBY2JnymJuoMOEVXyZGRbHUTqM2zh/tTtAjMZd3RTMfT5GIextj/+VyVwzYcwsbq5dxMIeBVGIZ6KZbePUXo4qMHxB4wPGvsRzDJ0hKdByum/dnVKWpwfzBJaeolWJX8xayFlB2dnOX4WpM4PM8heIxZD/Luo8XwZLmu10V8X4ZOajFmaJ33GHjJ5WN4unhH2VGAC/uIn45w4mt+6ALolTXoiHXEPmxY2BvmlH3YrorMpMxbCDNFl1rO4qgOy2fQEUJYjke2eO73wBE/HeWGBYVW59C5qE/1MKi1kzey9DRc2CMUxW2/e3ZhWsa6jxoqQ8NLGff3vii5kBbryTXX/cS6LQ/vUgnN5b+MIOhFNPawm2malO/TZOvK4+lTKDegglkajyBIaV4YEhs9iHNL+U1oysBcvHyZfXuu0vi10gOIArFEumEon6kkr3S1X5YuyEUNuplvkMz6BZZ7cm/UMNzhX7U93G0axEqo5yK1PQ145Z/qKEwzVyvCIFUHf9umM8/qYlCf//2EwTMAJ4gn/khIia2oRw1ZSgQS//UfcUwouRoxVWE=
-  app: kmcmanipal
-  on:
-    repo: tornadoalert/kmcoffice
+
