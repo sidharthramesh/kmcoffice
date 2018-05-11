@@ -112,10 +112,27 @@ var Classes = (function () {
   var currentClasses = [];
   var currBatch = "";
   var currDate = "";
-  function renderDept () {
-    return `<select>` + Object.keys(departments).map(function (key) {
-      return `<option value="` + key + `">` + departments[key] + `</option>`;
-    }).join('') + `</select>`;
+  function renderDept (name, obj) {    
+    var match = matchDept(name);
+    if (match === null) {
+      return `<select><option value="None">None</option>` + Object.keys(departments).map(function (key) {
+        return `<option value="` + key + `">` + departments[key] + `</option>`;
+      }).join('') + `</select>`;
+    }
+    else {
+      obj.department = match;
+      return departments[match];
+    }
+  };
+  function matchDept (name) {
+    name = name.toLowerCase();
+    var match = null;
+    for (key in departments) {
+      if (name.indexOf(departments[key].toLowerCase()) > -1) {
+        match = key;
+      }
+    }
+    return match;
   };
   function renderListing () {
     // get date
@@ -162,11 +179,16 @@ var Classes = (function () {
       .replace('START_TIME', moment(class_.start).format('h:mm a'))
       .replace('END_TIME', moment(class_.end).format('h:mm a'))
       .replace('DATE', moment(class_.start).format('dddd, Do MMMM'))
-      .replace('DEPT', (class_.department !== null ? departments[class_.department] : renderDept()));
+      .replace('DEPT', (class_.department !== null ? departments[class_.department] : renderDept(class_.name, class_)));
     el.setAttribute('data-index', index);
     el.querySelector('.click').addEventListener('click', function () {
       var i = parseInt(this.parentNode.getAttribute('data-index'));
-      Selected.addToList(i, currentClasses[i].department === null ? this.parentNode.querySelector('select').value : null);
+      var v = currentClasses[i].department === null ? this.parentNode.querySelector('select').value : currentClasses[i].department;
+      if (v === "None") {
+        this.parentNode.querySelector('.validation').innerHTML = "Please select the department.";
+        return false;
+      }
+      Selected.addToList(i, v);
       this.parentNode.parentNode.removeChild(this.parentNode);
     }, false);
     return el;
