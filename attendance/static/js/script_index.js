@@ -126,13 +126,13 @@ var Classes = (function () {
   };
   function matchDept (name) {
     name = name.toLowerCase();
-    var match = null;
+    var matches = [];
     for (key in departments) {
       if (new RegExp('(^|[^a-zA-ZΆΈ-ώἀ-ῼ\n])(' + departments[key].toLowerCase() + ')(?![a-zA-ZΆΈ-ώἀ-ῼ])', 'g').test(name)) {
-        match = key;
+        matches.push(key);
       }
     }
-    return match;
+    return matches.length === 0 ? null : (matches.length > 1) ? null : matches[0];
   };
   function renderListing () {
     // get date
