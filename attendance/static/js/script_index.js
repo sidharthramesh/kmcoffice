@@ -128,7 +128,7 @@ var Classes = (function () {
     name = name.toLowerCase();
     var matches = [];
     for (key in departments) {
-      if (new RegExp('(^|[^a-zA-ZΆΈ-ώἀ-ῼ\n])(' + departments[key].toLowerCase() + ')(?![a-zA-ZΆΈ-ώἀ-ῼ])', 'g').test(name)) {
+      if (new RegExp('(^|[^a-zA-ZΆΈ-ώἀ-ῼ\n]|\/)(' + departments[key].toLowerCase() + ')(?![a-zA-ZΆΈ-ώἀ-ῼ])', 'g').test(name)) {
         matches.push(key);
       }
     }
