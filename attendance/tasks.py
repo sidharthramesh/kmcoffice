@@ -15,6 +15,11 @@ def ping():
     r = requests.post("https://requestb.in/1dvp3ch1",{"hello":"World"})
     return r.status_code
 
+@task
+def delete_logs():
+    from django.contrib.admin.models import LogEntry
+    LogEntry.objects.all().delete()
+
 @shared_task
 def send_email(*args,**kwargs):
     return mail(*args,**kwargs)
