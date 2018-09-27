@@ -30,7 +30,7 @@ class PreClaimAdmin(admin.ModelAdmin):
 @admin.register(Claim)
 class ClaimAdmin(admin.ModelAdmin):
     exclude = ('sis_approved',)
-    list_display = ('student','name','period','date','pre_claim_approved','js_approved','sis_approved')
+    list_display = ('student','name','period','date','event','pre_claim_approved','js_approved','sis_approved')
     actions = [js_approve,sis_approve]
     search_fields = ['student__name','student__roll_no','period__department__name']
     def get_actions(self,request):
