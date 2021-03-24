@@ -39,7 +39,7 @@ python-mimeparse==1.6.0
 pytz==2017.2
 redis==2.10.6
 requests==2.18.4
-rsa==3.4.2
+rsa==4.1
 six==1.11.0
 tzlocal==1.4
 uritemplate==3.0.0
